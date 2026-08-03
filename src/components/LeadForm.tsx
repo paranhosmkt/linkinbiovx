@@ -1,0 +1,155 @@
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { ArrowLeft, Download, CheckCircle2, FileText } from 'lucide-react';
+import { ViewState } from '../types';
+
+interface LeadFormProps {
+  setView: (view: ViewState) => void;
+}
+
+export default function LeadForm({ setView }: LeadFormProps) {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    optIn: false,
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.optIn) return;
+    
+    // In a real application, send this to a backend/CRM
+    setTimeout(() => {
+      setIsSubmitted(true);
+    }, 600);
+  };
+
+  const handleDownload = () => {
+    window.open("https://drive.google.com/file/d/1vkyfMHsalPkigcefVudKL3bj2ghQtPRK/view?usp=sharing", "_blank", "noopener,noreferrer");
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+      className="w-full max-w-md mx-auto min-h-screen bg-black px-6 py-8 flex flex-col"
+    >
+      <button
+        onClick={() => setView('home')}
+        className="flex items-center justify-center w-10 h-10 mb-8 rounded-full bg-zinc-900 hover:bg-zinc-800 transition-colors shrink-0"
+      >
+        <ArrowLeft className="w-5 h-5 text-white" />
+      </button>
+
+      <AnimatePresence mode="wait">
+        {!isSubmitted ? (
+          <motion.div
+            key="form"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="flex-1 flex flex-col"
+          >
+            <div className="mb-8">
+              <div className="inline-flex p-3 bg-amber-500/10 text-amber-500 rounded-2xl mb-4">
+                <FileText className="w-8 h-8" />
+              </div>
+              <h2 className="text-3xl font-bold tracking-tight text-white mb-3">
+                Baixe o Checklist
+              </h2>
+              <p className="text-zinc-400 leading-relaxed text-sm">
+                Preencha os dados abaixo para receber as <span className="text-white font-semibold">10 dicas essenciais</span> para sua equipe não perder nenhum lead qualificado.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-5 flex-1">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-zinc-300 mb-1.5">
+                  Seu nome
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-shadow"
+                  placeholder="Ex: João Silva"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-zinc-300 mb-1.5">
+                  Seu melhor e-mail
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-shadow"
+                  placeholder="joao@empresa.com.br"
+                />
+              </div>
+
+              <div className="flex items-start gap-3 pt-2">
+                <input
+                  type="checkbox"
+                  id="optIn"
+                  required
+                  checked={formData.optIn}
+                  onChange={(e) => setFormData({ ...formData, optIn: e.target.checked })}
+                  className="mt-1 w-5 h-5 rounded border-zinc-700 bg-zinc-900 text-amber-500 focus:ring-amber-500 focus:ring-offset-black"
+                />
+                <label htmlFor="optIn" className="text-sm text-zinc-400 leading-tight">
+                  Concordo em receber novidades, ofertas e comunicações. (Você pode cancelar a qualquer momento).
+                </label>
+              </div>
+
+              <div className="pt-6">
+                <button
+                  type="submit"
+                  disabled={!formData.name || !formData.email || !formData.optIn}
+                  className="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold py-4 rounded-xl transition-all disabled:opacity-50 disabled:hover:bg-amber-500 active:scale-[0.98]"
+                >
+                  Liberar meu Download
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="success"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex-1 flex flex-col items-center justify-center text-center pb-20"
+          >
+            <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6">
+              <CheckCircle2 className="w-10 h-10 text-emerald-500" />
+            </div>
+            <h2 className="text-3xl font-bold tracking-tight text-white mb-3">
+              Tudo Certo!
+            </h2>
+            <p className="text-zinc-400 leading-relaxed mb-8 max-w-[280px]">
+              Seu checklist foi liberado. Clique no botão abaixo para baixar o arquivo.
+            </p>
+            
+            <motion.button
+              onClick={handleDownload}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-4 px-8 rounded-xl transition-colors"
+            >
+              <Download className="w-5 h-5" />
+              Baixar Checklist
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}

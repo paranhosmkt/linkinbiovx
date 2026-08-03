@@ -1,0 +1,8 @@
+{
+  "name": "Linkinbio",
+  "description": "A premium link-in-bio application featuring dynamic routing, lead capture, and animated components for VX.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
