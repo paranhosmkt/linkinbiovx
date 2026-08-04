@@ -49,12 +49,15 @@ export default function About({ setView }: AboutProps) {
             <p>
               Foi por isso que mudei minha abordagem e passei a desenvolver soluções focadas em resolver exatamente esses gargalos. Hoje, meu papel é ajudar expositores a maximizarem seus resultados, saindo da feira com a certeza de dever cumprido, e com motivos de sobra para comemorar com a equipe.
             </p>
+            <p>
+              Faço conteúdos, materiais e desenvolvi a plataforma VX focada em trabalhar diferentes etapas do funil de vendas. Te convido a me seguir no Instagram e a conhecer esse projeto incrível. Conte comigo!
+            </p>
           </div>
         </div>
 
         <div className="space-y-4">
           <h3 className="text-lg font-bold text-white">
-            São 3 soluções que trabalham diferentes etapas do seu funil de vendas:
+            As soluções da plataforma VX são:
           </h3>
           
           <div className="p-5 bg-zinc-900 rounded-2xl border border-zinc-800">

@@ -54,7 +54,7 @@ export default function Home({ setView }: HomeProps) {
             Guilherme R. Paranhos
           </h1>
           <p className="text-zinc-400 text-base lg:text-lg font-medium">
-            Especialista de vendas B2B em eventos
+            Especialista em Marketing, Inteligência Artificial e vendas B2B em eventos.
           </p>
         </motion.div>
 
