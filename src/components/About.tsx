@@ -31,7 +31,7 @@ export default function About({ setView }: AboutProps) {
         </button>
       </div>
 
-      <div className="space-y-8 w-full px-1 sm:px-2">
+      <div className="space-y-8 w-full px-5 sm:px-8">
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-white mb-4">
             Quem sou eu?

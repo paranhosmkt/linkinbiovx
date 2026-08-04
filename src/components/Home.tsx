@@ -28,13 +28,13 @@ export default function Home({ setView }: HomeProps) {
       animate="show"
       exit={{ opacity: 0, y: -20 }}
       variants={containerVariants}
-      className="flex flex-col lg:flex-row items-center justify-center w-full max-w-6xl mx-auto min-h-screen pt-2 px-2 pb-12 lg:py-12 lg:px-6 gap-8 lg:gap-16"
+      className="flex flex-col lg:flex-row items-center justify-center w-full max-w-6xl mx-auto min-h-screen pt-2 px-5 pb-12 lg:py-12 lg:px-8 gap-8 lg:gap-16"
     >
       {/* Left Column: Video */}
       <motion.div variants={itemVariants} className="relative w-full max-w-full sm:max-w-[500px] md:max-w-[600px] lg:max-w-[600px] shrink-0">
         <div className="relative w-full rounded-[2rem] overflow-hidden bg-black">
           <video
-            src="https://videosvx.s3.us-east-1.amazonaws.com/gui.mp4.mp4"
+            src="https://videovxleads.s3.us-east-1.amazonaws.com/expositor.mp4"
             autoPlay
             loop
             muted
@@ -141,9 +141,20 @@ export default function Home({ setView }: HomeProps) {
                 Checklist do Vendedor
               </h3>
             </div>
-            <p className="text-sm text-zinc-400 text-left font-medium leading-relaxed">
-              10 dicas para sua equipe de vendas não perder leads qualificados. <span className="text-amber-500 font-semibold">Baixe grátis!</span>
+            <p className="text-sm text-zinc-400 text-left font-medium leading-relaxed mb-4">
+              10 dicas para sua equipe de vendas não perder leads qualificados.
             </p>
+            
+            <div className="w-full relative mt-auto">
+              <motion.div 
+                animate={{ scale: [1, 1.03, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                className="w-full bg-amber-500 text-black font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.5)]"
+              >
+                <Download className="w-4 h-4" />
+                Clique aqui para baixar
+              </motion.div>
+            </div>
           </div>
         </motion.button>
       </div>

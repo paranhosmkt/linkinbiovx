@@ -1,0 +1,28 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function incoming() { return request.resource.data; }
+    
+    function isValidLead(data) {
+      return data.keys().hasAll(['name', 'email', 'optIn', 'createdAt']) &&
+             data.keys().size() <= 5 && // name, email, optIn, createdAt, phone (optional)
+             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.email is string && data.email.size() > 5 && data.email.size() <= 150 && data.email.matches('^.+@.+\\..+$') &&
+             data.optIn is bool &&
+             (data.keys().hasAny(['phone']) ? (data.phone is string && data.phone.size() <= 20) : true) &&
+             data.createdAt == request.time;
+    }
+
+    match /leads/{leadId} {
+      // Allow anonymous users to submit a lead if the payload is valid
+      allow create: if isValidLead(incoming());
+      allow read, update, delete: if false; // only backend/admins can read or modify
+    }
+    
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

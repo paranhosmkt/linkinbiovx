@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, Download, CheckCircle2, FileText } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, FileText } from 'lucide-react';
 import { ViewState } from '../types';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 interface LeadFormProps {
   setView: (view: ViewState) => void;
@@ -15,18 +17,39 @@ export default function LeadForm({ setView }: LeadFormProps) {
     optIn: false,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.optIn) return;
     
-    // In a real application, send this to a backend/CRM
-    setTimeout(() => {
-      setIsSubmitted(true);
-    }, 600);
-  };
+    setIsSubmitting(true);
+    
+    try {
+      // 1. Save to Firestore directly from the client
+      await addDoc(collection(db, 'leads'), {
+        name: formData.name,
+        email: formData.email,
+        optIn: formData.optIn,
+        createdAt: serverTimestamp()
+      });
 
-  const handleDownload = () => {
-    window.open("https://drive.google.com/file/d/1vkyfMHsalPkigcefVudKL3bj2ghQtPRK/view?usp=sharing", "_blank", "noopener,noreferrer");
+      // 2. Call our backend to send the Thank You email
+      await fetch('/api/leads/email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: formData.name, email: formData.email }),
+      });
+      
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("Error submitting lead:", error);
+      alert("Ocorreu um erro ao enviar seu cadastro. Tente novamente.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -113,10 +136,14 @@ export default function LeadForm({ setView }: LeadFormProps) {
               <div className="pt-6">
                 <button
                   type="submit"
-                  disabled={!formData.name || !formData.email || !formData.optIn}
-                  className="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold py-4 rounded-xl transition-all disabled:opacity-50 disabled:hover:bg-amber-500 active:scale-[0.98]"
+                  disabled={!formData.name || !formData.email || !formData.optIn || isSubmitting}
+                  className="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold py-4 rounded-xl transition-all disabled:opacity-50 disabled:hover:bg-amber-500 active:scale-[0.98] flex items-center justify-center"
                 >
-                  Liberar meu Download
+                  {isSubmitting ? (
+                    <div className="w-6 h-6 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    "Liberar meu Download"
+                  )}
                 </button>
               </div>
             </form>
@@ -135,18 +162,8 @@ export default function LeadForm({ setView }: LeadFormProps) {
               Tudo Certo!
             </h2>
             <p className="text-zinc-400 leading-relaxed mb-8 max-w-[280px]">
-              Seu checklist foi liberado. Clique no botão abaixo para baixar o arquivo.
+              Seu checklist do vendedor foi liberado e enviado para seu e-mail. Verifique a caixa de spam.
             </p>
-            
-            <motion.button
-              onClick={handleDownload}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-4 px-8 rounded-xl transition-colors"
-            >
-              <Download className="w-5 h-5" />
-              Baixar Checklist
-            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>

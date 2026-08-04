@@ -1,0 +1,14 @@
+{
+  "collections": [
+    {
+      "name": "leads",
+      "fields": [
+        { "name": "name", "type": "string", "required": true },
+        { "name": "email", "type": "string", "required": true },
+        { "name": "phone", "type": "string", "required": false },
+        { "name": "optIn", "type": "boolean", "required": true },
+        { "name": "createdAt", "type": "timestamp", "required": true }
+      ]
+    }
+  ]
+}
