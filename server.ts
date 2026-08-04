@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
 import { Resend } from 'resend';
 
@@ -10,6 +11,21 @@ async function startServer() {
   app.use(express.json());
 
   // API routes
+  app.get('/api/firebase-config', (req, res) => {
+    try {
+      const configPath = path.join(process.cwd(), 'firebase-applet-config.json');
+      if (fs.existsSync(configPath)) {
+        const rawData = fs.readFileSync(configPath, 'utf8');
+        res.json(JSON.parse(rawData));
+      } else {
+        res.json({});
+      }
+    } catch (error) {
+      console.error("Error reading firebase config", error);
+      res.json({});
+    }
+  });
+
   app.post('/api/leads/email', async (req, res) => {
     try {
       const { name, email } = req.body;
@@ -29,7 +45,7 @@ async function startServer() {
             html: `
               <div style="font-family: sans-serif; padding: 20px;">
                 <h1>Olá, ${name}!</h1>
-                <p>Obrigado por se cadastrar. Seu checklist do vendedor foi liberado.</p>
+                <p>Obrigado por se cadastrar. Seu checklist do vendedor no estande foi liberado.</p>
                 <p>Você pode acessar e baixar o arquivo clicando no link abaixo:</p>
                 <p><a href="https://drive.google.com/file/d/1vkyfMHsalPkigcefVudKL3bj2ghQtPRK/view?usp=sharing" style="display: inline-block; padding: 10px 20px; background-color: #f59e0b; color: #000; text-decoration: none; border-radius: 5px; font-weight: bold;">Acessar Checklist</a></p>
                 <br/>

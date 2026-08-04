@@ -138,7 +138,7 @@ export default function Home({ setView }: HomeProps) {
                 <Download className="w-5 h-5" />
               </div>
               <h3 className="font-bold text-white text-left text-lg leading-tight">
-                Checklist do Vendedor
+                Checklist do Vendedor no Estande
               </h3>
             </div>
             <p className="text-sm text-zinc-400 text-left font-medium leading-relaxed mb-4">

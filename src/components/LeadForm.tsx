@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, CheckCircle2, FileText } from 'lucide-react';
 import { ViewState } from '../types';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { getDb } from '../lib/firebase';
 
 interface LeadFormProps {
   setView: (view: ViewState) => void;
@@ -27,6 +27,7 @@ export default function LeadForm({ setView }: LeadFormProps) {
     
     try {
       // 1. Save to Firestore directly from the client
+      const db = await getDb();
       await addDoc(collection(db, 'leads'), {
         name: formData.name,
         email: formData.email,
@@ -162,7 +163,7 @@ export default function LeadForm({ setView }: LeadFormProps) {
               Tudo Certo!
             </h2>
             <p className="text-zinc-400 leading-relaxed mb-8 max-w-[280px]">
-              Seu checklist do vendedor foi liberado e enviado para seu e-mail. Verifique a caixa de spam.
+              Seu checklist do vendedor no estande foi liberado e enviado para seu e-mail. Verifique a caixa de spam.
             </p>
           </motion.div>
         )}
