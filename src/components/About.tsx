@@ -47,10 +47,27 @@ export default function About({ setView }: AboutProps) {
               Eu senti isso na pele.
             </p>
             <p>
-              Foi por isso que mudei minha abordagem e passei a desenvolver soluções focadas em resolver exatamente esses gargalos. Hoje, meu papel é ajudar expositores a maximizarem seus resultados, saindo da feira com a certeza de dever cumprido, e com motivos de sobra para comemorar com a equipe.
+              Foi por isso que mudei minha abordagem e passei a desenvolver soluções focadas em resolver exatamente esses gargalos. Hoje, meu papel é ajudar expositores a maximizarem seus resultados, saindo da feira com a certeza de dever cumprido e com motivos de sobra para comemorar com a equipe.
             </p>
             <p>
-              Faço conteúdos, materiais e desenvolvi a plataforma VX focada em trabalhar diferentes etapas do funil de vendas. Te convido a me seguir no Instagram e a conhecer esse projeto incrível. Conte comigo!
+              Para isso, crio conteúdos, materiais práticos e desenvolvi o ecossistema VX, soluções inteligentes desenhadas para otimizar cada etapa do seu funil de vendas.
+            </p>
+            <p>
+              Te convido a me seguir no Instagram para acompanhar estratégias diárias e conhecer mais sobre esse projeto:
+            </p>
+            
+            <a
+              href="https://www.instagram.com/paranhos.vx"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold py-4 rounded-xl transition-all active:scale-[0.98] mt-4 mb-4"
+            >
+              <Instagram className="w-5 h-5" />
+              Clique aqui e me siga
+            </a>
+
+            <p>
+              Conte comigo!
             </p>
           </div>
         </div>
@@ -67,9 +84,12 @@ export default function About({ setView }: AboutProps) {
               </div>
               <h4 className="text-white font-bold text-lg">O VX Avatar</h4>
             </div>
-            <p className="text-sm text-zinc-400 leading-relaxed">
-              Um personagem com inteligência artificial que chama a atenção e conversa em tempo real com seu público, ele pode tirar dúvidas, falar sobre questões técnicas, explicar a solução para diferentes contextos e coletar dados importantes sobre dúvidas e ajustes que podem ser feitos na abordagem de vendas.
-            </p>
+            <div className="text-sm text-zinc-400 leading-relaxed space-y-3">
+              <p className="font-semibold text-white">A atração do seu estande impulsionada por Inteligência Artificial em tempo real.</p>
+              <p>Um personagem com IA interativa que chama a atenção do público do evento e conversa em tempo real com os visitantes.</p>
+              <p><span className="font-semibold text-zinc-300">Interação Humanizada:</span> Tira dúvidas técnicas, apresenta soluções para diferentes contextos de negócio e prende a atenção de quem passa pelo corredor.</p>
+              <p><span className="font-semibold text-zinc-300">Inteligência de Mercado:</span> Coleta dados estratégicos sobre as principais dúvidas dos visitantes, entregando insights para ajustar e afiar a abordagem da sua equipe de vendas.</p>
+            </div>
           </div>
 
           <div className="p-5 bg-zinc-900 rounded-2xl border border-zinc-800">
@@ -79,9 +99,13 @@ export default function About({ setView }: AboutProps) {
               </div>
               <h4 className="text-white font-bold text-lg">O VX Leads</h4>
             </div>
-            <p className="text-sm text-zinc-400 leading-relaxed">
-              Uma gamificação para totem que distribui brindes por cadastro através do smartphone ou tablet do visitante e que busca organizar a distribuição de brindes e otimizar a qualificação dos leads no estande. Funciona como um jogo, onde o usuário precisa assistir um pitch curto da empresa, responder algumas perguntas curtas de qualificação e girar a roleta ou participar de um jogo curto com um pequeno desafio, assim ele pode ganhar os brindes. Os cadastros feitos podem ser enviados diretamente para o CRM da empresa para que o time de SDR ou vendas entre em contato o quanto antes, essa abordagem ajuda a reduzir em até 85% o risco de perda do lead.
-            </p>
+            <div className="text-sm text-zinc-400 leading-relaxed space-y-3">
+              <p className="font-semibold text-white">Gamificação inteligente para capturar, qualificar e organizar leads em totens.</p>
+              <p>Transforme a distribuição de brindes em um ativo comercial. O visitante joga, se engaja e a sua empresa captura dados altamente qualificados.</p>
+              <p><span className="font-semibold text-zinc-300">Engajamento Interativo:</span> O usuário assiste a um pitch curto da sua solução, responde a perguntas rápidas de qualificação e ganha brindes em jogos dinâmicos ou roletas.</p>
+              <p><span className="font-semibold text-zinc-300">Integração Imediata:</span> Os dados vão direto para o CRM da sua empresa para que o time de SDRs/Vendas atue rápido.</p>
+              <p><span className="font-semibold text-zinc-300">Zero Desperdício:</span> Reduz em até 85% o risco de perda de leads no estande.</p>
+            </div>
           </div>
 
           <div className="p-5 bg-zinc-900 rounded-2xl border border-zinc-800">
@@ -89,28 +113,19 @@ export default function About({ setView }: AboutProps) {
               <div className="shrink-0 overflow-hidden rounded-lg">
                 <img src="https://i.ibb.co/RkkMZg7R/3.jpg" alt="VX Sales" className="w-8 h-8 object-cover" />
               </div>
-              <h4 className="text-white font-bold text-lg">VX Sales</h4>
+              <h4 className="text-white font-bold text-lg">O VX Sales</h4>
             </div>
-            <p className="text-sm text-zinc-400 leading-relaxed">
-              Uma solução de transição para o fundo do funil de vendas, ela faz a primeira abordagem aos leads pós evento através do Whatsapp de forma humanizada, faz uma breve triagem usando gatilhos de venda e direciona para um vendedor do time, aumentando a capacidade de atendimento simultâneo e entregando um lead mais aquecido para facilitar a conversão.
-            </p>
+            <div className="text-sm text-zinc-400 leading-relaxed space-y-3">
+              <p className="font-semibold text-white">Acelere o fundo do funil com abordagem humanizada pós-evento via WhatsApp.</p>
+              <p>A ponte perfeita entre o contato do estande e o fechamento do contrato, garantindo velocidade no momento mais crítico da feira.</p>
+              <p><span className="font-semibold text-zinc-300">Triagem Inteligente:</span> Realiza o primeiro contato de forma humanizada e ágil via WhatsApp, utilizando gatilhos mentais de vendas.</p>
+              <p><span className="font-semibold text-zinc-300">Escala Comercial:</span> Multiplica a capacidade de atendimento simultâneo do seu time.</p>
+              <p><span className="font-semibold text-zinc-300">Repasse Aquecido:</span> Filtra o nível de interesse e entrega o lead pronto para o vendedor fechar o negócio.</p>
+            </div>
           </div>
         </div>
 
-        <div className="pt-2 pb-6">
-          <p className="text-center text-zinc-300 font-medium mb-4">
-            Quer saber como melhorar as vendas no seu estande? Acompanha meu Instagram:
-          </p>
-          <a
-            href="https://www.instagram.com/paranhos.vx"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold py-4 rounded-xl transition-all active:scale-[0.98]"
-          >
-            <Instagram className="w-5 h-5" />
-            Clique aqui e me siga
-          </a>
-        </div>
+        <div className="pb-8"></div>
       </div>
     </motion.div>
   );
