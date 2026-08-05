@@ -28,10 +28,10 @@ export default function Home({ setView }: HomeProps) {
       animate="show"
       exit={{ opacity: 0, y: -20 }}
       variants={containerVariants}
-      className="flex flex-col lg:flex-row items-center justify-center w-full max-w-6xl mx-auto min-h-screen pt-2 px-5 pb-12 lg:py-12 lg:px-8 gap-8 lg:gap-16"
+      className="flex flex-col lg:flex-row items-center justify-center w-full max-w-7xl mx-auto min-h-screen pt-2 px-5 pb-12 lg:py-12 lg:px-8 gap-8 lg:gap-16"
     >
       {/* Left Column: Video */}
-      <motion.div variants={itemVariants} className="relative w-full max-w-full sm:max-w-[500px] md:max-w-[600px] lg:max-w-[600px] shrink-0">
+      <motion.div variants={itemVariants} className="relative w-full max-w-full sm:max-w-[600px] md:max-w-[700px] lg:max-w-[700px] shrink-0">
         <div className="relative w-full rounded-[2rem] overflow-hidden bg-black">
           <video
             src="https://videovxleads.s3.us-east-1.amazonaws.com/expositor.mp4"
