@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { AnimatePresence } from 'motion/react';
+import { Analytics } from '@vercel/analytics/react';
 import Home from './components/Home';
 import About from './components/About';
 import LeadForm from './components/LeadForm';
@@ -15,6 +16,7 @@ export default function App() {
         {view === 'about' && <About key="about" setView={setView} />}
         {view === 'form' && <LeadForm key="form" setView={setView} />}
       </AnimatePresence>
+      <Analytics />
     </div>
   );
 }
