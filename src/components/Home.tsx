@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { User, Link as LinkIcon, Bot, Magnet, CheckSquare, Download } from 'lucide-react';
+import { User, Link as LinkIcon, Bot, Magnet, CheckSquare, Download, Instagram } from 'lucide-react';
 import { ViewState } from '../types';
 
 interface HomeProps {
@@ -34,7 +34,7 @@ export default function Home({ setView }: HomeProps) {
       <motion.div variants={itemVariants} className="relative w-full max-w-full sm:max-w-[600px] md:max-w-[700px] lg:max-w-[700px] shrink-0">
         <div className="relative w-full rounded-[2rem] overflow-hidden bg-black">
           <video
-            src="https://videovxleads.s3.us-east-1.amazonaws.com/expositor.mp4"
+            src="https://videovxleads.s3.us-east-1.amazonaws.com/videoparanhosvx.mp4"
             autoPlay
             loop
             muted
@@ -59,6 +59,59 @@ export default function Home({ setView }: HomeProps) {
         </motion.div>
 
         <div className="w-full flex flex-col gap-4">
+          {/* Highlighted Checklist Button */}
+          <motion.button
+            variants={itemVariants}
+            onClick={() => setView('form')}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            animate={{
+              boxShadow: [
+                '0 0 0 0 rgba(234, 179, 8, 0)',
+                '0 0 0 10px rgba(234, 179, 8, 0.1)',
+                '0 0 0 0 rgba(234, 179, 8, 0)',
+              ],
+            }}
+            transition={{
+              boxShadow: {
+                duration: 2,
+                repeat: Infinity,
+              },
+            }}
+            className="relative flex flex-col w-full mb-2 p-[2px] rounded-2xl overflow-hidden group"
+          >
+            {/* Animated gradient border background */}
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 opacity-80" />
+            
+            <div className="relative flex flex-col items-start w-full bg-zinc-950 p-5 rounded-[14px] z-10 transition-colors group-hover:bg-zinc-900/90">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-1.5 bg-amber-500/20 text-amber-500 rounded-lg">
+                  <Download className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-white text-left text-lg leading-tight">
+                  Checklist do Vendedor no Estande
+                </h3>
+              </div>
+              <p className="text-sm text-zinc-400 text-left font-medium leading-relaxed mb-4">
+                10 dicas para sua equipe de vendas não perder leads qualificados.
+              </p>
+              
+              <div className="w-full relative mt-auto">
+                <motion.div 
+                  animate={{ scale: [1, 1.03, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  className="w-full bg-amber-500 text-black font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.5)]"
+                >
+                  <Download className="w-4 h-4" />
+                  Clique aqui para baixar
+                </motion.div>
+                <p className="text-xs text-center w-full mt-3 font-semibold text-zinc-400 uppercase tracking-widest">
+                  100% gratuito
+                </p>
+              </div>
+            </div>
+          </motion.button>
+
           <motion.button
           variants={itemVariants}
           whileHover={{ scale: 1.02 }}
@@ -108,55 +161,22 @@ export default function Home({ setView }: HomeProps) {
           </div>
         </motion.a>
 
-        {/* Highlighted Checklist Button */}
-        <motion.button
+        <motion.a
+          href="https://instagram.com/paranhosmkt"
+          target="_blank"
+          rel="noopener noreferrer"
           variants={itemVariants}
-          onClick={() => setView('form')}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          animate={{
-            boxShadow: [
-              '0 0 0 0 rgba(234, 179, 8, 0)',
-              '0 0 0 10px rgba(234, 179, 8, 0.1)',
-              '0 0 0 0 rgba(234, 179, 8, 0)',
-            ],
-          }}
-          transition={{
-            boxShadow: {
-              duration: 2,
-              repeat: Infinity,
-            },
-          }}
-          className="relative flex flex-col w-full mt-4 p-[2px] rounded-2xl overflow-hidden group"
+          className="flex items-center justify-between w-full p-4 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-2xl transition-colors group"
         >
-          {/* Animated gradient border background */}
-          <div className="absolute inset-0 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 opacity-80" />
-          
-          <div className="relative flex flex-col items-start w-full bg-zinc-950 p-5 rounded-[14px] z-10 transition-colors group-hover:bg-zinc-900/90">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="p-1.5 bg-amber-500/20 text-amber-500 rounded-lg">
-                <Download className="w-5 h-5" />
-              </div>
-              <h3 className="font-bold text-white text-left text-lg leading-tight">
-                Checklist do Vendedor no Estande
-              </h3>
+          <div className="flex items-center gap-4">
+            <div className="p-2 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 rounded-xl transition-colors overflow-hidden flex items-center justify-center">
+              <Instagram className="w-5 h-5 text-white" />
             </div>
-            <p className="text-sm text-zinc-400 text-left font-medium leading-relaxed mb-4">
-              10 dicas para sua equipe de vendas não perder leads qualificados.
-            </p>
-            
-            <div className="w-full relative mt-auto">
-              <motion.div 
-                animate={{ scale: [1, 1.03, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                className="w-full bg-amber-500 text-black font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.5)]"
-              >
-                <Download className="w-4 h-4" />
-                Clique aqui para baixar
-              </motion.div>
-            </div>
+            <span className="font-semibold text-white">Me segue lá</span>
           </div>
-        </motion.button>
+        </motion.a>
       </div>
       </div>
     </motion.div>
