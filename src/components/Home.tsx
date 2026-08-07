@@ -161,6 +161,21 @@ export default function Home({ setView }: HomeProps) {
           </div>
         </motion.a>
 
+        <motion.button
+          onClick={() => setView('vx-sales')}
+          variants={itemVariants}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="flex items-center justify-between w-full p-4 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-2xl transition-colors group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="p-2 bg-zinc-800 group-hover:bg-zinc-700 rounded-xl transition-colors overflow-hidden flex items-center justify-center">
+              <img src="https://i.ibb.co/RkkMZg7R/3.jpg" alt="VX Sales" className="w-5 h-5 object-cover rounded-sm" />
+            </div>
+            <span className="font-semibold text-white">VX Sales</span>
+          </div>
+        </motion.button>
+
         <motion.a
           href="https://instagram.com/paranhos.vx"
           target="_blank"

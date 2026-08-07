@@ -3,6 +3,7 @@ import { AnimatePresence } from 'motion/react';
 import Home from './components/Home';
 import About from './components/About';
 import LeadForm from './components/LeadForm';
+import VxSales from './components/VxSales';
 import { ViewState } from './types';
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
         {view === 'home' && <Home key="home" setView={setView} />}
         {view === 'about' && <About key="about" setView={setView} />}
         {view === 'form' && <LeadForm key="form" setView={setView} />}
+        {view === 'vx-sales' && <VxSales key="vx-sales" setView={setView} />}
       </AnimatePresence>
     </div>
   );
