@@ -162,7 +162,7 @@ export default function Home({ setView }: HomeProps) {
         </motion.a>
 
         <motion.a
-          href="https://instagram.com/paranhosmkt"
+          href="https://instagram.com/paranhos.vx"
           target="_blank"
           rel="noopener noreferrer"
           variants={itemVariants}
