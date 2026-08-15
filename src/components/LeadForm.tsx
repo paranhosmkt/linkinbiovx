@@ -59,11 +59,11 @@ export default function LeadForm({ setView }: LeadFormProps) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="w-full max-w-md mx-auto min-h-screen bg-black px-6 py-8 flex flex-col"
+      className="w-full max-w-md mx-auto min-h-screen bg-transparent px-6 py-8 flex flex-col justify-center"
     >
       <button
         onClick={() => setView('home')}
-        className="flex items-center justify-center w-10 h-10 mb-8 rounded-full bg-zinc-900 hover:bg-zinc-800 transition-colors shrink-0"
+        className="flex items-center justify-center w-10 h-10 mb-8 rounded-full bg-zinc-900/70 hover:bg-zinc-800/80 border border-white/10 backdrop-blur-md transition-colors shrink-0 cursor-pointer shadow-lg"
       >
         <ArrowLeft className="w-5 h-5 text-white" />
       </button>
@@ -75,13 +75,13 @@ export default function LeadForm({ setView }: LeadFormProps) {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="flex-1 flex flex-col"
+            className="flex-1 flex flex-col bg-zinc-900/50 backdrop-blur-xl border border-white/[0.08] p-6 sm:p-8 rounded-3xl shadow-2xl"
           >
-            <div className="mb-8">
-              <div className="inline-flex p-3 bg-amber-500/10 text-amber-500 rounded-2xl mb-4">
-                <FileText className="w-8 h-8" />
+            <div className="mb-6">
+              <div className="inline-flex p-3 bg-amber-500/15 text-amber-400 border border-amber-500/30 rounded-2xl mb-4 shadow-inner">
+                <FileText className="w-6 h-6" />
               </div>
-              <h2 className="text-3xl font-bold tracking-tight text-white mb-3">
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-2">
                 Baixe o Checklist
               </h2>
               <p className="text-zinc-400 leading-relaxed text-sm">
@@ -89,9 +89,9 @@ export default function LeadForm({ setView }: LeadFormProps) {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5 flex-1">
+            <form onSubmit={handleSubmit} className="space-y-4 flex-1">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-zinc-300 mb-1.5">
+                <label htmlFor="name" className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-1.5">
                   Seu nome
                 </label>
                 <input
@@ -100,13 +100,13 @@ export default function LeadForm({ setView }: LeadFormProps) {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-shadow"
+                  className="w-full bg-zinc-950/70 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all text-sm"
                   placeholder="Ex: João Silva"
                 />
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-zinc-300 mb-1.5">
+                <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-1.5">
                   Seu melhor e-mail
                 </label>
                 <input
@@ -115,37 +115,39 @@ export default function LeadForm({ setView }: LeadFormProps) {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-shadow"
+                  className="w-full bg-zinc-950/70 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all text-sm"
                   placeholder="joao@empresa.com.br"
                 />
               </div>
 
-              <div className="flex items-start gap-3 pt-2">
+              <div className="flex items-start gap-3 pt-1">
                 <input
                   type="checkbox"
                   id="optIn"
                   required
                   checked={formData.optIn}
                   onChange={(e) => setFormData({ ...formData, optIn: e.target.checked })}
-                  className="mt-1 w-5 h-5 rounded border-zinc-700 bg-zinc-900 text-amber-500 focus:ring-amber-500 focus:ring-offset-black"
+                  className="mt-0.5 w-4 h-4 rounded border-white/20 bg-zinc-950 text-amber-500 focus:ring-amber-500 focus:ring-offset-black cursor-pointer"
                 />
-                <label htmlFor="optIn" className="text-sm text-zinc-400 leading-tight">
-                  Concordo em receber novidades, ofertas e comunicações. (Você pode cancelar a qualquer momento).
+                <label htmlFor="optIn" className="text-xs text-zinc-400 leading-snug cursor-pointer">
+                  Concordo em receber novidades e comunicações. (Você pode cancelar a qualquer momento).
                 </label>
               </div>
 
-              <div className="pt-6">
-                <button
+              <div className="pt-4">
+                <motion.button
+                  whileHover={{ scale: 1.015 }}
+                  whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={!formData.name || !formData.email || !formData.optIn || isSubmitting}
-                  className="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold py-4 rounded-xl transition-all disabled:opacity-50 disabled:hover:bg-amber-500 active:scale-[0.98] flex items-center justify-center"
+                  className="relative overflow-hidden w-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-500 text-black font-bold py-3.5 rounded-xl transition-all disabled:opacity-50 disabled:hover:bg-amber-500 active:scale-[0.98] flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.3)] cursor-pointer"
                 >
                   {isSubmitting ? (
-                    <div className="w-6 h-6 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
                   ) : (
                     "Liberar meu Download"
                   )}
-                </button>
+                </motion.button>
               </div>
             </form>
           </motion.div>
@@ -154,15 +156,15 @@ export default function LeadForm({ setView }: LeadFormProps) {
             key="success"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="flex-1 flex flex-col items-center justify-center text-center pb-20"
+            className="flex-1 flex flex-col items-center justify-center text-center p-8 bg-zinc-900/50 backdrop-blur-xl border border-white/[0.08] rounded-3xl shadow-2xl"
           >
-            <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6">
-              <CheckCircle2 className="w-10 h-10 text-emerald-500" />
+            <div className="w-16 h-16 bg-emerald-500/15 border border-emerald-500/30 rounded-2xl flex items-center justify-center mb-6 shadow-inner">
+              <CheckCircle2 className="w-8 h-8 text-emerald-400" />
             </div>
-            <h2 className="text-3xl font-bold tracking-tight text-white mb-3">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-2">
               Tudo Certo!
             </h2>
-            <p className="text-zinc-400 leading-relaxed mb-8 max-w-[280px]">
+            <p className="text-zinc-400 leading-relaxed text-sm max-w-[280px]">
               Seu checklist do vendedor no estande foi liberado e enviado para seu e-mail. Verifique a caixa de spam.
             </p>
           </motion.div>

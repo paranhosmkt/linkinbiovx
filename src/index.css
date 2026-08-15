@@ -1,1 +1,40 @@
 @import "tailwindcss";
+
+/* Custom Modern Dark Scrollbar */
+@layer base {
+  html {
+    color-scheme: dark;
+    scrollbar-width: thin;
+    scrollbar-color: #27272a #09090b;
+    scroll-behavior: smooth;
+  }
+
+  /* WebKit (Chrome, Safari, Edge) */
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #09090b;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #27272a;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background-color 0.2s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3f3f46;
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    background: #52525b;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}

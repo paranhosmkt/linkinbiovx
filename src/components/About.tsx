@@ -91,7 +91,7 @@ export default function About({ setView }: AboutProps) {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="w-full max-w-4xl mx-auto min-h-screen bg-black pb-8"
+      className="w-full max-w-4xl mx-auto min-h-screen bg-transparent pb-12"
     >
       <div className="relative w-full h-[512px] sm:h-[640px] mb-6">
         <img
@@ -100,11 +100,11 @@ export default function About({ setView }: AboutProps) {
           referrerPolicy="no-referrer"
           className="w-full h-full object-cover object-top"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-[#09090b] pointer-events-none" />
         
         <button
           onClick={() => setView('home')}
-          className="absolute top-6 left-4 flex items-center justify-center w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 hover:bg-black/70 transition-colors z-10"
+          className="absolute top-6 left-4 flex items-center justify-center w-10 h-10 rounded-full bg-zinc-900/70 backdrop-blur-md border border-white/10 hover:bg-zinc-800 transition-colors z-10 cursor-pointer shadow-lg"
         >
           <ArrowLeft className="w-5 h-5 text-white" />
         </button>
@@ -171,15 +171,15 @@ export default function About({ setView }: AboutProps) {
                   key={sol.id}
                   layout
                   transition={{ layout: { duration: 0.3, type: 'spring', stiffness: 350, damping: 30 } }}
-                  className={`rounded-2xl border transition-colors overflow-hidden ${
+                  className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
                     isExpanded
-                      ? 'bg-zinc-900 border-zinc-700 shadow-lg shadow-black/40'
-                      : 'bg-zinc-900/70 border-zinc-800/80 hover:bg-zinc-900 hover:border-zinc-700/80'
+                      ? 'bg-zinc-900/80 border-zinc-700/90 shadow-xl shadow-black/50 backdrop-blur-xl'
+                      : 'bg-zinc-900/40 border-white/[0.08] hover:bg-zinc-900/70 hover:border-white/20 backdrop-blur-xl'
                   }`}
                 >
                   <button
                     onClick={() => toggleSolution(sol.id)}
-                    className="w-full p-4 sm:p-5 flex items-center justify-between gap-3 text-left focus:outline-none transition-colors"
+                    className="w-full p-4 sm:p-5 flex items-center justify-between gap-3 text-left focus:outline-none transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
                       <div className="shrink-0 overflow-hidden rounded-xl border border-zinc-800 w-10 h-10 flex items-center justify-center bg-zinc-950">
