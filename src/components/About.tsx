@@ -1,78 +1,136 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, Instagram, ChevronDown } from 'lucide-react';
+import {
+  ArrowLeft,
+  Instagram,
+  ChevronDown,
+  Bot,
+  Gamepad2,
+  Send,
+  Sparkles,
+  BarChart3,
+  Users,
+  Database,
+  ShieldCheck,
+  Flame,
+  Zap,
+  CheckCircle2,
+} from 'lucide-react';
 import { ViewState } from '../types';
 
 interface AboutProps {
   setView: (view: ViewState) => void;
 }
 
+interface SolutionPoint {
+  title: string;
+  desc: string;
+  icon: typeof Bot;
+  badge?: string;
+}
+
 interface Solution {
   id: string;
   name: string;
+  badge: string;
+  color: string;
+  accentBg: string;
+  borderColor: string;
   image: string;
   tagline: string;
   description: string;
-  points: { label: string; text: string }[];
+  mainIcon: typeof Bot;
+  highlights: SolutionPoint[];
 }
 
 const solutions: Solution[] = [
   {
     id: 'avatar',
     name: 'O VX Avatar',
+    badge: 'Inteligência Artificial',
+    color: 'from-amber-500 to-orange-500',
+    accentBg: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+    borderColor: 'border-amber-500/30',
     image: 'https://i.ibb.co/dwF2gW5k/1.jpg',
+    mainIcon: Bot,
     tagline: 'A atração do seu estande impulsionada por Inteligência Artificial em tempo real.',
-    description: 'Um personagem com IA interativa que chama a atenção do público do evento e conversa em tempo real com os visitantes.',
-    points: [
+    description: 'Um personagem com IA interativa que chama a atenção do público no corredor e conduz conversas personalizadas e naturais com os visitantes.',
+    highlights: [
       {
-        label: 'Interação Humanizada',
-        text: 'Tira dúvidas técnicas, apresenta soluções para diferentes contextos de negócio e prende a atenção de quem passa pelo corredor.',
+        title: 'Interação Humanizada & Atração',
+        desc: 'Tira dúvidas técnicas, apresenta soluções para diferentes contextos e retém a atenção de quem passa pelo corredor.',
+        icon: Sparkles,
+        badge: 'Ao Vivo',
       },
       {
-        label: 'Inteligência de Mercado',
-        text: 'Coleta dados estratégicos sobre as principais dúvidas dos visitantes, entregando insights para ajustar e afiar a abordagem da sua equipe de vendas.',
+        title: 'Inteligência de Mercado & Dados',
+        desc: 'Mapeia as dores e dúvidas mais frequentes dos visitantes, entregando relatórios táticos para afiar o discurso dos seus vendedores.',
+        icon: BarChart3,
+        badge: 'Insights',
       },
     ],
   },
   {
     id: 'leads',
     name: 'O VX Leads',
+    badge: 'Gamificação & Totens',
+    color: 'from-blue-500 to-cyan-500',
+    accentBg: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+    borderColor: 'border-blue-500/30',
     image: 'https://i.ibb.co/Z1H2NT7y/2.jpg',
+    mainIcon: Gamepad2,
     tagline: 'Gamificação inteligente para capturar, qualificar e organizar leads em totens.',
-    description: 'Transforme a distribuição de brindes em um ativo comercial. O visitante joga, se engaja e a sua empresa captura dados altamente qualificados.',
-    points: [
+    description: 'Transforme a distribuição de brindes em um ativo comercial de alto impacto. O visitante joga, se diverte e a sua empresa recebe cadastros qualificados.',
+    highlights: [
       {
-        label: 'Engajamento Interativo',
-        text: 'O usuário assiste a um pitch curto da sua solução, responde a perguntas rápidas de qualificação e ganha brindes em jogos dinâmicos ou roletas.',
+        title: 'Engajamento & Qualificação Interativa',
+        desc: 'O usuário assiste a um mini pitch da sua solução, responde perguntas rápidas de perfil e concorre a prêmios em roletas ou quizzes dinâmicos.',
+        icon: Users,
+        badge: 'Interativo',
       },
       {
-        label: 'Integração Imediata',
-        text: 'Os dados vão direto para o CRM da sua empresa para que o time de SDRs/Vendas atue rápido.',
+        title: 'Integração Imediata com CRM',
+        desc: 'Dados estruturados sincronizados em tempo real para o time de pré-vendas (SDRs) agir com máxima velocidade.',
+        icon: Database,
+        badge: 'Real-time',
       },
       {
-        label: 'Zero Desperdício',
-        text: 'Reduz em até 85% o risco de perda de leads no estande.',
+        title: 'Zero Desperdício de Oportunidades',
+        desc: 'Reduz em até 85% o risco de perda de contatos no estande por falta de braço ou anotações manuais.',
+        icon: ShieldCheck,
+        badge: '-85% perdas',
       },
     ],
   },
   {
     id: 'sales',
     name: 'O VX Sales',
+    badge: 'Conversão & WhatsApp',
+    color: 'from-emerald-500 to-green-500',
+    accentBg: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+    borderColor: 'border-emerald-500/30',
     image: 'https://i.ibb.co/RkkMZg7R/3.jpg',
+    mainIcon: Send,
     tagline: 'Acelere o fundo do funil com abordagem humanizada pós-evento via WhatsApp.',
-    description: 'A ponte perfeita entre o contato do estande e o fechamento do contrato, garantindo velocidade no momento mais crítico da feira.',
-    points: [
+    description: 'A ponte definitiva entre a conversa no estande e o fechamento do contrato, garantindo velocidade imediata no pós-evento.',
+    highlights: [
       {
-        label: 'Triagem Inteligente',
-        text: 'Realiza o primeiro contato de forma humanizada e ágil via WhatsApp, utilizando gatilhos mentais de vendas.',
+        title: 'Triagem Ágil via WhatsApp',
+        desc: 'Primeiro contato caloroso e contextualizado com gatilhos de vendas para reaquecer a lembrança da feira.',
+        icon: Zap,
+        badge: 'Rápido',
       },
       {
-        label: 'Escala Comercial',
-        text: 'Multiplica a capacidade de atendimento simultâneo do seu time.',
+        title: 'Escala Comercial Instantânea',
+        desc: 'Atenda centenas de visitantes simultaneamente sem sobrecarregar sua equipe interna.',
+        icon: Users,
+        badge: 'Escala',
       },
       {
-        label: 'Repasse Aquecido',
-        text: 'Filtra o nível de interesse e entrega o lead pronto para o vendedor fechar o negócio.',
+        title: 'Repasse Aquecido para Fechamento',
+        desc: 'Filtra o real momento de compra e entrega a oportunidade pronta para o closer assinar o contrato.',
+        icon: Flame,
+        badge: 'Alta Conversão',
       },
     ],
   },
@@ -96,12 +154,12 @@ export default function About({ setView }: AboutProps) {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="w-full max-w-3xl mx-auto min-h-screen bg-transparent pb-12"
+      className="w-full max-w-3xl mx-auto min-h-screen bg-[#0e0e0e] pb-14"
     >
-      {/* Top Banner / Background Image - Larger and extends behind the text */}
-      <div className="relative w-full h-[520px] sm:h-[620px] overflow-hidden bg-zinc-950">
+      {/* Top Banner / Background Image */}
+      <div className="relative w-full h-[520px] sm:h-[620px] overflow-hidden bg-[#0e0e0e]">
         {!isLoaded && (
-          <div className="absolute inset-0 bg-zinc-900 animate-pulse flex items-center justify-center">
+          <div className="absolute inset-0 bg-[#0e0e0e] animate-pulse flex items-center justify-center">
             <div className="w-8 h-8 rounded-full border-2 border-zinc-700 border-t-amber-500 animate-spin" />
           </div>
         )}
@@ -117,20 +175,23 @@ export default function About({ setView }: AboutProps) {
             isLoaded ? 'opacity-100' : 'opacity-0'
           }`}
         />
-        {/* Soft dark gradient overlays to blend seamlessly behind text */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#09090b]" />
-        <div className="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-[#09090b] via-[#09090b]/85 to-transparent pointer-events-none" />
         
+        {/* Soft Vignette and seamless bottom gradient blending to #0e0e0e */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#0e0e0e]" />
+        <div className="absolute inset-x-0 bottom-0 h-80 bg-gradient-to-t from-[#0e0e0e] via-[#0e0e0e]/90 to-transparent pointer-events-none" />
+        
+        {/* Back Button */}
         <button
           onClick={() => setView('home')}
-          className="absolute top-5 left-4 flex items-center justify-center w-10 h-10 rounded-full bg-zinc-900/80 backdrop-blur-md border border-white/15 hover:bg-zinc-800 transition-colors z-20 cursor-pointer shadow-lg active:scale-95"
+          className="absolute top-5 left-4 flex items-center justify-center w-10 h-10 rounded-full bg-[#0e0e0e]/80 backdrop-blur-md border border-white/15 hover:bg-zinc-800 transition-colors z-20 cursor-pointer shadow-lg active:scale-95"
+          aria-label="Voltar para início"
         >
           <ArrowLeft className="w-5 h-5 text-white" />
         </button>
       </div>
 
-      {/* Content positioned lower, gracefully overlaying the bottom fade of the image */}
-      <div className="relative z-10 space-y-7 w-full px-5 sm:px-8 -mt-28 sm:-mt-36">
+      {/* Content positioned overlaying the bottom fade */}
+      <div className="relative z-10 space-y-8 w-full px-5 sm:px-8 -mt-28 sm:-mt-36">
         <div>
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-3 drop-shadow-lg">
             Quem sou eu?
@@ -173,19 +234,27 @@ export default function About({ setView }: AboutProps) {
           </div>
         </div>
 
-        <div className="space-y-4">
+        {/* VX Solutions Section */}
+        <div className="space-y-4 pt-2">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-bold text-white">
-              As soluções da plataforma VX são:
-            </h3>
-            <span className="text-xs text-zinc-400 font-medium">
-              Clique para expandir
+            <div>
+              <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+                Ecossistema de Soluções VX
+              </h3>
+              <p className="text-xs sm:text-sm text-zinc-400 mt-0.5">
+                Projetado para acelerar cada fase da feira
+              </p>
+            </div>
+            <span className="text-[11px] uppercase tracking-wider text-zinc-400 font-medium bg-zinc-900/90 px-2.5 py-1 rounded-full border border-white/5">
+              Interativo
             </span>
           </div>
           
-          <div className="space-y-3">
+          <div className="space-y-3.5">
             {solutions.map((sol) => {
               const isExpanded = expandedId === sol.id;
+              const MainIcon = sol.mainIcon;
+
               return (
                 <motion.div
                   key={sol.id}
@@ -193,8 +262,8 @@ export default function About({ setView }: AboutProps) {
                   transition={{ layout: { duration: 0.3, type: 'spring', stiffness: 350, damping: 30 } }}
                   className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
                     isExpanded
-                      ? 'bg-zinc-900/80 border-zinc-700/90 shadow-xl shadow-black/50 backdrop-blur-xl'
-                      : 'bg-zinc-900/40 border-white/[0.08] hover:bg-zinc-900/70 hover:border-white/20 backdrop-blur-xl'
+                      ? 'bg-zinc-900/90 border-zinc-700/90 shadow-2xl shadow-black/70 backdrop-blur-xl'
+                      : 'bg-zinc-900/50 border-white/[0.08] hover:bg-zinc-900/80 hover:border-white/20 backdrop-blur-xl'
                   }`}
                 >
                   <button
@@ -202,20 +271,27 @@ export default function About({ setView }: AboutProps) {
                     className="w-full p-4 sm:p-5 flex items-center justify-between gap-3 text-left focus:outline-none transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
-                      <div className="shrink-0 overflow-hidden rounded-xl border border-zinc-800 w-10 h-10 flex items-center justify-center bg-zinc-950">
+                      <div className="relative shrink-0 overflow-hidden rounded-xl border border-zinc-800 w-11 h-11 flex items-center justify-center bg-zinc-950">
                         <img
                           src={sol.image}
                           alt={sol.name}
                           referrerPolicy="no-referrer"
                           className="w-full h-full object-cover"
                         />
+                        <div className="absolute inset-0 bg-black/10" />
                       </div>
+
                       <div className="min-w-0">
-                        <h4 className="text-white font-bold text-base sm:text-lg leading-tight">
-                          {sol.name}
-                        </h4>
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-white font-bold text-base sm:text-lg leading-tight truncate">
+                            {sol.name}
+                          </h4>
+                          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${sol.accentBg}`}>
+                            {sol.badge}
+                          </span>
+                        </div>
                         {!isExpanded && (
-                          <p className="text-xs sm:text-sm text-zinc-400 truncate mt-0.5 max-w-[240px] sm:max-w-md">
+                          <p className="text-xs sm:text-sm text-zinc-400 truncate mt-1 max-w-[220px] sm:max-w-md">
                             {sol.tagline}
                           </p>
                         )}
@@ -229,8 +305,10 @@ export default function About({ setView }: AboutProps) {
                       <motion.div
                         animate={{ rotate: isExpanded ? 180 : 0 }}
                         transition={{ duration: 0.25, ease: 'easeInOut' }}
-                        className={`p-1.5 rounded-lg ${
-                          isExpanded ? 'bg-zinc-800 text-white' : 'bg-zinc-800/50 text-zinc-400'
+                        className={`p-2 rounded-xl border transition-colors ${
+                          isExpanded
+                            ? 'bg-zinc-800 text-white border-zinc-700'
+                            : 'bg-zinc-800/60 text-zinc-400 border-white/5'
                         }`}
                       >
                         <ChevronDown className="w-4 h-4" />
@@ -248,22 +326,47 @@ export default function About({ setView }: AboutProps) {
                         transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                         className="overflow-hidden"
                       >
-                        <div className="px-4 sm:px-5 pb-5 pt-1 border-t border-zinc-800/80 text-sm text-zinc-400 leading-relaxed space-y-3.5">
-                          <p className="font-semibold text-white pt-2 text-[15px]">
-                            {sol.tagline}
-                          </p>
-                          <p>
-                            {sol.description}
-                          </p>
-                          <div className="space-y-2.5 pt-1">
-                            {sol.points.map((point, index) => (
-                              <p key={index}>
-                                <span className="font-semibold text-zinc-200">
-                                  {point.label}:{' '}
-                                </span>
-                                {point.text}
-                              </p>
-                            ))}
+                        <div className="px-4 sm:px-5 pb-5 pt-2 border-t border-zinc-800/80 space-y-4">
+                          {/* Tagline and Brief */}
+                          <div className="space-y-1.5 pt-1">
+                            <p className="font-semibold text-white text-[15px] leading-snug">
+                              {sol.tagline}
+                            </p>
+                            <p className="text-sm text-zinc-400 leading-relaxed">
+                              {sol.description}
+                            </p>
+                          </div>
+
+                          {/* Subdivided Topic Cards */}
+                          <div className="grid grid-cols-1 gap-2.5 pt-1">
+                            {sol.highlights.map((point, index) => {
+                              const PointIcon = point.icon;
+                              return (
+                                <div
+                                  key={index}
+                                  className="flex items-start gap-3 p-3 sm:p-3.5 rounded-xl bg-zinc-950/60 border border-white/[0.06] hover:border-white/10 transition-colors"
+                                >
+                                  <div className={`shrink-0 p-2 rounded-lg ${sol.accentBg} mt-0.5`}>
+                                    <PointIcon className="w-4 h-4" />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center justify-between gap-2 mb-1">
+                                      <h5 className="text-sm font-semibold text-zinc-200">
+                                        {point.title}
+                                      </h5>
+                                      {point.badge && (
+                                        <span className="text-[10px] font-medium text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded border border-white/5 shrink-0">
+                                          {point.badge}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <p className="text-xs sm:text-[13px] text-zinc-400 leading-relaxed">
+                                      {point.desc}
+                                    </p>
+                                  </div>
+                                </div>
+                              );
+                            })}
                           </div>
                         </div>
                       </motion.div>
@@ -280,3 +383,4 @@ export default function About({ setView }: AboutProps) {
     </motion.div>
   );
 }
+
