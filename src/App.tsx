@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'motion/react';
 import Home from './components/Home';
 import About from './components/About';
@@ -9,6 +9,17 @@ import { ViewState } from './types';
 
 export default function App() {
   const [view, setView] = useState<ViewState>('home');
+
+  useEffect(() => {
+    // Always scroll window to absolute top when switching views
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+  }, [view]);
+
+  useEffect(() => {
+    // Background prefetch for instant loading when clicking "Quem sou eu"
+    const img = new Image();
+    img.src = 'https://i.ibb.co/dw6sPmpP/Guilhermep01.jpg';
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#09090b] text-white selection:bg-amber-500/30 selection:text-amber-200 font-sans overflow-x-hidden relative">

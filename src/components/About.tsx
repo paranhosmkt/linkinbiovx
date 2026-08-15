@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, Instagram, ChevronDown } from 'lucide-react';
 import { ViewState } from '../types';
@@ -80,6 +80,11 @@ const solutions: Solution[] = [
 
 export default function About({ setView }: AboutProps) {
   const [expandedId, setExpandedId] = useState<string | null>('avatar');
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const toggleSolution = (id: string) => {
     setExpandedId((prev) => (prev === id ? null : id));
@@ -91,28 +96,43 @@ export default function About({ setView }: AboutProps) {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="w-full max-w-4xl mx-auto min-h-screen bg-transparent pb-12"
+      className="w-full max-w-3xl mx-auto min-h-screen bg-transparent pb-12"
     >
-      <div className="relative w-full h-[512px] sm:h-[640px] mb-6">
+      {/* Top Banner / Background Image - Larger and extends behind the text */}
+      <div className="relative w-full h-[520px] sm:h-[620px] overflow-hidden bg-zinc-950">
+        {!isLoaded && (
+          <div className="absolute inset-0 bg-zinc-900 animate-pulse flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full border-2 border-zinc-700 border-t-amber-500 animate-spin" />
+          </div>
+        )}
         <img
           src="https://i.ibb.co/dw6sPmpP/Guilhermep01.jpg"
-          alt="Guilherme"
+          alt="Guilherme R. Paranhos"
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
           referrerPolicy="no-referrer"
-          className="w-full h-full object-cover object-top"
+          onLoad={() => setIsLoaded(true)}
+          className={`w-full h-full object-cover object-top transition-opacity duration-300 ${
+            isLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-[#09090b] pointer-events-none" />
+        {/* Soft dark gradient overlays to blend seamlessly behind text */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#09090b]" />
+        <div className="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-[#09090b] via-[#09090b]/85 to-transparent pointer-events-none" />
         
         <button
           onClick={() => setView('home')}
-          className="absolute top-6 left-4 flex items-center justify-center w-10 h-10 rounded-full bg-zinc-900/70 backdrop-blur-md border border-white/10 hover:bg-zinc-800 transition-colors z-10 cursor-pointer shadow-lg"
+          className="absolute top-5 left-4 flex items-center justify-center w-10 h-10 rounded-full bg-zinc-900/80 backdrop-blur-md border border-white/15 hover:bg-zinc-800 transition-colors z-20 cursor-pointer shadow-lg active:scale-95"
         >
           <ArrowLeft className="w-5 h-5 text-white" />
         </button>
       </div>
 
-      <div className="space-y-8 w-full px-5 sm:px-8">
+      {/* Content positioned lower, gracefully overlaying the bottom fade of the image */}
+      <div className="relative z-10 space-y-7 w-full px-5 sm:px-8 -mt-28 sm:-mt-36">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-white mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-3 drop-shadow-lg">
             Quem sou eu?
           </h2>
           <div className="text-zinc-300 leading-relaxed space-y-4 text-[15px]">
