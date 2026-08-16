@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { User, Download, Instagram, ChevronRight, Sparkles, ExternalLink, Bot, Magnet, MessageSquareText } from 'lucide-react';
 import { ViewState } from '../types';
@@ -7,6 +8,17 @@ interface HomeProps {
 }
 
 export default function Home({ setView }: HomeProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.play().catch(() => {
+        // Fallback for browser autoplay policies
+      });
+    }
+  }, []);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -28,17 +40,19 @@ export default function Home({ setView }: HomeProps) {
       <div className="absolute -top-10 sm:-top-16 left-1/2 -translate-x-1/2 w-full max-w-md sm:max-w-lg flex justify-center pointer-events-none z-0">
         <div className="relative w-full">
           <video
+            ref={videoRef}
             src="https://videovxleads.s3.us-east-1.amazonaws.com/video01.mp4"
             autoPlay
             loop
             muted
             playsInline
-            className="w-full h-auto object-contain opacity-95 brightness-110 contrast-105"
+            preload="auto"
+            disablePictureInPicture
+            disableRemotePlayback
+            className="w-full h-auto object-contain opacity-100 brightness-[1.25] contrast-[1.08] saturate-[1.12] transform-gpu will-change-transform"
           />
-          {/* #0e0e0e soft vignette and edge blend with lighter center */}
-          <div className="absolute inset-0 shadow-[inset_0_0_40px_15px_#0e0e0e] sm:shadow-[inset_0_0_65px_25px_#0e0e0e]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_60%,#0e0e0e_100%)] opacity-50" />
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0e0e0e] via-[#0e0e0e]/80 to-transparent" />
+          {/* Bottom blend only to smoothly meet the content background */}
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#0e0e0e] to-transparent pointer-events-none" />
         </div>
       </div>
 
