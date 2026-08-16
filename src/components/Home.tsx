@@ -33,12 +33,12 @@ export default function Home({ setView }: HomeProps) {
             loop
             muted
             playsInline
-            className="w-full h-auto object-contain opacity-80"
+            className="w-full h-auto object-contain opacity-95 brightness-110 contrast-105"
           />
-          {/* #0e0e0e soft vignette and edge blend */}
-          <div className="absolute inset-0 shadow-[inset_0_0_50px_20px_#0e0e0e] sm:shadow-[inset_0_0_80px_35px_#0e0e0e]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,#0e0e0e_100%)] opacity-70" />
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0e0e0e] via-[#0e0e0e]/85 to-transparent" />
+          {/* #0e0e0e soft vignette and edge blend with lighter center */}
+          <div className="absolute inset-0 shadow-[inset_0_0_40px_15px_#0e0e0e] sm:shadow-[inset_0_0_65px_25px_#0e0e0e]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_60%,#0e0e0e_100%)] opacity-50" />
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0e0e0e] via-[#0e0e0e]/80 to-transparent" />
         </div>
       </div>
 
