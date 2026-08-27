@@ -15,8 +15,10 @@ import {
   Flame,
   Zap,
   CheckCircle2,
+  Clock,
 } from 'lucide-react';
 import { ViewState } from '../types';
+import WaitlistForm from './WaitlistForm';
 
 interface AboutProps {
   setView: (view: ViewState) => void;
@@ -73,7 +75,7 @@ const solutions: Solution[] = [
   {
     id: 'leads',
     name: 'O VX Leads',
-    badge: 'Gamificação & Totens',
+    badge: 'Em breve • 15/09',
     color: 'from-blue-500 to-cyan-500',
     accentBg: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
     borderColor: 'border-blue-500/30',
@@ -82,6 +84,12 @@ const solutions: Solution[] = [
     tagline: 'Gamificação inteligente para capturar, qualificar e organizar leads em totens.',
     description: 'Transforme a distribuição de brindes em um ativo comercial de alto impacto. O visitante joga, se diverte e a sua empresa recebe cadastros qualificados.',
     highlights: [
+      {
+        title: 'Produto em Desenvolvimento',
+        desc: 'Previsão para entrar em operação no dia 15 de setembro.',
+        icon: Clock,
+        badge: '15/09',
+      },
       {
         title: 'Engajamento & Qualificação Interativa',
         desc: 'O usuário assiste a um mini pitch da sua solução, responde perguntas rápidas de perfil e concorre a prêmios em roletas ou quizzes dinâmicos.',
@@ -105,7 +113,7 @@ const solutions: Solution[] = [
   {
     id: 'sales',
     name: 'O VX Sales',
-    badge: 'Conversão & WhatsApp',
+    badge: 'Em breve • 15/10',
     color: 'from-emerald-500 to-green-500',
     accentBg: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
     borderColor: 'border-emerald-500/30',
@@ -114,6 +122,12 @@ const solutions: Solution[] = [
     tagline: 'Acelere o fundo do funil com abordagem humanizada pós-evento via WhatsApp.',
     description: 'A ponte definitiva entre a conversa no estande e o fechamento do contrato, garantindo velocidade imediata no pós-evento.',
     highlights: [
+      {
+        title: 'Produto em Desenvolvimento',
+        desc: 'Previsão para entrar em operação no dia 15 de outubro.',
+        icon: Clock,
+        badge: '15/10',
+      },
       {
         title: 'Triagem Ágil via WhatsApp',
         desc: 'Primeiro contato caloroso e contextualizado com gatilhos de vendas para reaquecer a lembrança da feira.',
@@ -368,6 +382,29 @@ export default function About({ setView }: AboutProps) {
                               );
                             })}
                           </div>
+
+                          {/* Formulário de Lista de Espera embutido */}
+                          {sol.id === 'leads' && (
+                            <div className="pt-2">
+                              <WaitlistForm
+                                productName="VX Leads"
+                                productKey="vx-leads"
+                                betaDate="01 de agosto"
+                                accentColor="blue"
+                              />
+                            </div>
+                          )}
+
+                          {sol.id === 'sales' && (
+                            <div className="pt-2">
+                              <WaitlistForm
+                                productName="VX Sales"
+                                productKey="vx-sales"
+                                betaDate="10 de agosto"
+                                accentColor="emerald"
+                              />
+                            </div>
+                          )}
                         </div>
                       </motion.div>
                     )}

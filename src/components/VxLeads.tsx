@@ -2,11 +2,11 @@ import { motion } from 'motion/react';
 import { ArrowLeft, Clock } from 'lucide-react';
 import { ViewState } from '../types';
 
-interface VxSalesProps {
+interface VxLeadsProps {
   setView: (view: ViewState) => void;
 }
 
-export default function VxSales({ setView }: VxSalesProps) {
+export default function VxLeads({ setView }: VxLeadsProps) {
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -27,42 +27,42 @@ export default function VxSales({ setView }: VxSalesProps) {
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
             <div className="shrink-0 overflow-hidden rounded-2xl border border-white/10 w-16 h-16 sm:w-20 sm:h-20 shadow-md">
               <img
-                src="https://i.ibb.co/RkkMZg7R/3.jpg"
-                alt="VX Sales"
+                src="https://i.ibb.co/Z1H2NT7y/2.jpg"
+                alt="VX Leads"
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover"
               />
             </div>
             <div>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold mb-1.5">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-1.5">
                 Em desenvolvimento
               </div>
               <h2 className="text-3xl font-bold tracking-tight text-white">
-                O VX Sales
+                O VX Leads
               </h2>
             </div>
           </div>
           
           <div className="text-zinc-300 leading-relaxed space-y-4 mb-10 text-[15px] sm:text-base">
             <p className="font-bold text-white text-lg sm:text-xl leading-snug">
-              Acelere o fundo do funil com abordagem humanizada pós-evento via WhatsApp.
+              Gamificação inteligente para capturar, qualificar e organizar leads em totens interativos.
             </p>
             <p className="text-zinc-400">
-              A ponte perfeita entre o contato do estande e o fechamento do contrato, garantindo velocidade no momento mais crítico da feira.
+              Transforme a distribuição de brindes em um ativo comercial de alto impacto. O visitante joga, se diverte e a sua empresa recebe cadastros qualificados.
             </p>
             <div className="space-y-3.5 pt-6 mt-6 border-t border-white/10">
-              <p><span className="font-semibold text-white">Triagem Inteligente:</span> Realiza o primeiro contato de forma humanizada e ágil via WhatsApp, utilizando gatilhos mentais de vendas.</p>
-              <p><span className="font-semibold text-white">Escala Comercial:</span> Multiplica a capacidade de atendimento simultâneo do seu time.</p>
-              <p><span className="font-semibold text-white">Repasse Aquecido:</span> Filtra o nível de interesse e entrega o lead pronto para o vendedor fechar o negócio.</p>
+              <p><span className="font-semibold text-white">Engajamento & Qualificação:</span> O usuário assiste a um mini pitch da sua solução, responde perguntas rápidas de perfil e concorre a prêmios em roletas ou quizzes dinâmicos.</p>
+              <p><span className="font-semibold text-white">Integração Imediata com CRM:</span> Dados estruturados sincronizados em tempo real para o time de pré-vendas (SDRs) agir com máxima velocidade.</p>
+              <p><span className="font-semibold text-white">Zero Desperdício:</span> Reduz em até 85% o risco de perda de contatos no estande por falta de braço ou anotações manuais.</p>
             </div>
           </div>
           
           <div className="flex flex-col items-center justify-center p-8 bg-zinc-950/60 rounded-2xl border border-dashed border-white/15 text-center">
             <div className="p-3.5 bg-zinc-900/80 border border-white/10 rounded-2xl mb-4 shadow-inner">
-              <Clock className="w-6 h-6 text-amber-400" />
+              <Clock className="w-6 h-6 text-blue-400" />
             </div>
             <h3 className="text-white font-bold text-lg mb-1">Produto em desenvolvimento</h3>
-            <p className="text-xs sm:text-sm text-zinc-400">Previsão para entrar em operação: <span className="text-white font-semibold">15 de outubro</span></p>
+            <p className="text-xs sm:text-sm text-zinc-400">Previsão para entrar em operação: <span className="text-white font-semibold">15 de setembro</span></p>
           </div>
         </div>
       </div>

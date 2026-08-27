@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, CheckCircle, Mail, User, Download, ExternalLink, Loader2, Sparkles, ShieldCheck } from 'lucide-react';
+import { X, CheckCircle, Mail, User, ArrowRight, ExternalLink, Loader2, Sparkles, ShieldCheck, Smartphone, WifiOff, Lock } from 'lucide-react';
 
 interface LeadModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+const CHECKLIST_APP_URL = 'https://checklistvendedor.vercel.app';
 
 export default function LeadModal({ isOpen, onClose }: LeadModalProps) {
   const [name, setName] = useState('');
@@ -14,7 +16,7 @@ export default function LeadModal({ isOpen, onClose }: LeadModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
-  const [downloadUrl, setDownloadUrl] = useState('https://drive.google.com/file/d/1vkyfMHsalPkigcefVudKL3bj2ghQtPRK/view?usp=sharing');
+  const [accessUrl, setAccessUrl] = useState(CHECKLIST_APP_URL);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,8 +56,8 @@ export default function LeadModal({ isOpen, onClose }: LeadModalProps) {
         throw new Error(data.error || 'Erro ao processar o formulário. Tente novamente.');
       }
 
-      if (data.downloadUrl) {
-        setDownloadUrl(data.downloadUrl);
+      if (data.accessUrl || data.downloadUrl) {
+        setAccessUrl(data.accessUrl || data.downloadUrl);
       }
 
       setSubmitted(true);
@@ -115,17 +117,25 @@ export default function LeadModal({ isOpen, onClose }: LeadModalProps) {
                 <div className="flex items-center gap-2 mb-2">
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">
                     <Sparkles className="w-3 h-3" />
-                    Material Gratuito
+                    App Gratuito
                   </span>
                 </div>
 
                 <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
-                  Checklist do Vendedor
+                  App Checklist do Vendedor
                 </h2>
 
-                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed mb-6">
-                  Preencha seus dados abaixo para liberar o acesso imediato e receber uma cópia exclusiva no seu e-mail.
+                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed mb-4">
+                  Preencha seus dados abaixo para liberar o acesso imediato ao aplicativo web e receber o link direto no seu e-mail.
                 </p>
+
+                {/* Offline & Local Privacy notice */}
+                <div className="p-3 bg-zinc-900/80 border border-white/10 rounded-xl mb-5 flex items-start gap-2.5">
+                  <WifiOff className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                  <div className="text-xs text-zinc-300 leading-snug">
+                    <strong className="text-white">100% Offline & Seguro:</strong> O app funciona mesmo sem internet no pavilhão e todas as anotações ficam gravadas <u>exclusivamente no seu dispositivo</u>.
+                  </div>
+                </div>
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -207,8 +217,8 @@ export default function LeadModal({ isOpen, onClose }: LeadModalProps) {
                         </>
                       ) : (
                         <>
-                          <span>Receber Checklist Agora</span>
-                          <Download className="w-4 h-4 text-black" />
+                          <span>Acessar App Agora</span>
+                          <ArrowRight className="w-4 h-4 text-black" />
                         </>
                       )}
                     </button>
@@ -232,21 +242,26 @@ export default function LeadModal({ isOpen, onClose }: LeadModalProps) {
                 </h3>
 
                 <p className="text-zinc-300 text-sm leading-relaxed mb-3">
-                  Parabéns, <span className="font-semibold text-amber-400">{name}</span>!
+                  Pronto, <span className="font-semibold text-amber-400">{name}</span>!
                 </p>
 
-                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed max-w-xs mx-auto mb-6">
-                  Seu checklist já está disponível para download. Também enviamos uma cópia com o link para <strong className="text-zinc-300">{email}</strong>.
+                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed max-w-xs mx-auto mb-4">
+                  Seu acesso ao aplicativo web já está disponível. Enviamos também o link direto para <strong className="text-zinc-300">{email}</strong>.
                 </p>
+
+                <div className="p-2.5 bg-zinc-900 border border-white/10 rounded-xl mb-5 text-[11px] text-zinc-400 flex items-center justify-center gap-2">
+                  <WifiOff className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                  <span>Funciona offline • Dados salvos apenas no seu dispositivo</span>
+                </div>
 
                 <div className="space-y-3">
                   <a
-                    href={downloadUrl}
+                    href={accessUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="relative overflow-hidden w-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-sm sm:text-base py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(245,158,11,0.35)] active:scale-[0.98] transition-all cursor-pointer"
                   >
-                    <span>Baixar Checklist Agora</span>
+                    <span>Acessar App Checklist</span>
                     <ExternalLink className="w-4 h-4 text-black" />
                   </a>
 

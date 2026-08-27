@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { User, Instagram, ChevronRight, ExternalLink, FileText, ArrowRight } from 'lucide-react';
+import { User, Instagram, ChevronRight, ExternalLink, FileText, ArrowRight, WifiOff, Smartphone } from 'lucide-react';
 import { ViewState } from '../types';
 import LeadModal from './LeadModal';
 
@@ -72,7 +72,7 @@ export default function Home({ setView }: HomeProps) {
             Guilherme R. Paranhos
           </h1>
           <p className="text-zinc-300 text-sm sm:text-[15px] font-medium leading-relaxed max-w-sm mx-auto drop-shadow">
-            Ajudo empresas a aumentar o ROI em feiras e eventos empresariais
+            Tecnologia, estratégia e automação para expositores em feiras empresariais.
           </p>
         </motion.div>
 
@@ -93,17 +93,29 @@ export default function Home({ setView }: HomeProps) {
                     <FileText className="w-4 h-4" />
                   </div>
                   <h3 className="font-bold text-white text-left text-base sm:text-lg leading-tight">
-                    Checklist do Vendedor
+                    App Checklist do Vendedor
                   </h3>
                 </div>
                 <span className="text-[11px] font-semibold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                  Grátis
+                  App Grátis
                 </span>
               </div>
               
-              <p className="text-xs sm:text-sm text-zinc-400 text-left leading-relaxed mb-4">
-                Acesse a checklist gratuita do vendedor no estande com 10 dicas práticas para não perder leads qualificados.
+              <p className="text-xs sm:text-sm text-zinc-400 text-left leading-relaxed mb-3">
+                Acesse o app gratuito do checklist do vendedor no estande com 10 dicas práticas para não perder leads qualificados.
               </p>
+
+              {/* Offline & Local Storage info pills */}
+              <div className="flex flex-wrap items-center gap-2 mb-4 w-full">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-900 border border-white/10 text-[11px] font-medium text-zinc-300">
+                  <WifiOff className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                  <span>Funciona Offline</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-900 border border-white/10 text-[11px] font-medium text-zinc-300">
+                  <Smartphone className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span>Salvo apenas no seu aparelho</span>
+                </span>
+              </div>
               
               <div className="w-full relative mt-auto">
                 <button
@@ -172,14 +184,12 @@ export default function Home({ setView }: HomeProps) {
           </motion.a>
 
           {/* VX Leads */}
-          <motion.a
-            href="https://www.vxleads.com.br"
-            target="_blank"
-            rel="noopener noreferrer"
+          <motion.button
+            onClick={() => setView('vx-leads')}
             variants={itemVariants}
             whileHover={{ scale: 1.015, y: -2 }}
             whileTap={{ scale: 0.98 }}
-            className="relative flex items-center justify-between w-full p-4 bg-zinc-900/60 hover:bg-zinc-800/70 backdrop-blur-xl border border-white/[0.08] hover:border-white/20 rounded-2xl transition-all duration-300 group shadow-sm overflow-hidden cursor-pointer"
+            className="relative flex items-center justify-between w-full p-4 bg-zinc-900/60 hover:bg-zinc-800/70 backdrop-blur-xl border border-white/[0.08] hover:border-white/20 rounded-2xl transition-all duration-300 group shadow-sm overflow-hidden text-left cursor-pointer"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />
             <div className="flex items-center gap-3.5 min-w-0">
@@ -194,12 +204,15 @@ export default function Home({ setView }: HomeProps) {
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-white text-sm sm:text-base">VX Leads</span>
+                  <span className="text-[10px] font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20 px-1.5 py-0.5 rounded">
+                    Em breve
+                  </span>
                 </div>
                 <span className="text-xs text-zinc-400 block truncate">Gamificação e totens para captura de dados</span>
               </div>
             </div>
-            <ExternalLink className="w-4 h-4 text-zinc-500 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 ml-2" />
-          </motion.a>
+            <ChevronRight className="w-4 h-4 text-zinc-500 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+          </motion.button>
 
           {/* VX Sales */}
           <motion.button

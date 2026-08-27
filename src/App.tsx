@@ -3,6 +3,7 @@ import { AnimatePresence } from 'motion/react';
 import Home from './components/Home';
 import About from './components/About';
 import VxSales from './components/VxSales';
+import VxLeads from './components/VxLeads';
 import BackgroundEffects from './components/BackgroundEffects';
 import { ViewState } from './types';
 
@@ -27,6 +28,7 @@ export default function App() {
         <AnimatePresence mode="wait">
           {view === 'home' && <Home key="home" setView={setView} />}
           {view === 'about' && <About key="about" setView={setView} />}
+          {view === 'vx-leads' && <VxLeads key="vx-leads" setView={setView} />}
           {view === 'vx-sales' && <VxSales key="vx-sales" setView={setView} />}
         </AnimatePresence>
       </div>
