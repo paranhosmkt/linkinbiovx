@@ -1,7 +1,8 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { User, Download, Instagram, ChevronRight, Sparkles, ExternalLink, Bot, Magnet, MessageSquareText } from 'lucide-react';
+import { User, Instagram, ChevronRight, ExternalLink, FileText, ArrowRight } from 'lucide-react';
 import { ViewState } from '../types';
+import LeadModal from './LeadModal';
 
 interface HomeProps {
   setView: (view: ViewState) => void;
@@ -9,6 +10,7 @@ interface HomeProps {
 
 export default function Home({ setView }: HomeProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -49,10 +51,10 @@ export default function Home({ setView }: HomeProps) {
             preload="auto"
             disablePictureInPicture
             disableRemotePlayback
-            className="w-full h-auto object-contain opacity-100 brightness-[1.25] contrast-[1.08] saturate-[1.12] transform-gpu will-change-transform"
+            className="w-full h-auto object-contain opacity-100 brightness-[1.45] contrast-[1.05] saturate-[1.1] transform-gpu will-change-transform"
           />
-          {/* Bottom blend only to smoothly meet the content background */}
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#0e0e0e] to-transparent pointer-events-none" />
+          {/* Subtle bottom fade to transition to background */}
+          <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#0e0e0e] via-[#0e0e0e]/50 to-transparent pointer-events-none" />
         </div>
       </div>
 
@@ -76,13 +78,10 @@ export default function Home({ setView }: HomeProps) {
 
         {/* Buttons List */}
         <div className="w-full flex flex-col gap-3.5">
-          {/* Highlighted Checklist Button (Hero CTA) */}
-          <motion.button
+          {/* Highlighted Checklist Card (Hero CTA) */}
+          <motion.div
             variants={itemVariants}
-            onClick={() => setView('form')}
-            whileHover={{ scale: 1.015, y: -2 }}
-            whileTap={{ scale: 0.98 }}
-            className="relative flex flex-col w-full mb-1 p-[1.5px] rounded-2xl overflow-hidden group shadow-lg shadow-amber-500/10 cursor-pointer"
+            className="relative flex flex-col w-full mb-1 p-[1.5px] rounded-2xl overflow-hidden group shadow-lg shadow-amber-500/10"
           >
             {/* Animated gradient border */}
             <div className="absolute inset-0 bg-gradient-to-r from-amber-500 via-orange-400 to-amber-500 opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
@@ -91,7 +90,7 @@ export default function Home({ setView }: HomeProps) {
               <div className="flex items-center justify-between w-full mb-2.5">
                 <div className="flex items-center gap-2.5">
                   <div className="p-2 bg-amber-500/15 border border-amber-500/30 text-amber-400 rounded-xl shadow-inner">
-                    <Download className="w-4 h-4" />
+                    <FileText className="w-4 h-4" />
                   </div>
                   <h3 className="font-bold text-white text-left text-base sm:text-lg leading-tight">
                     Checklist do Vendedor
@@ -103,19 +102,23 @@ export default function Home({ setView }: HomeProps) {
               </div>
               
               <p className="text-xs sm:text-sm text-zinc-400 text-left leading-relaxed mb-4">
-                10 dicas práticas para sua equipe de vendas não perder leads qualificados no estande.
+                Acesse a checklist gratuita do vendedor no estande com 10 dicas práticas para não perder leads qualificados.
               </p>
               
               <div className="w-full relative mt-auto">
-                <div className="relative overflow-hidden w-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-sm py-3 rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.35)] transition-all">
+                <button
+                  type="button"
+                  onClick={() => setIsLeadModalOpen(true)}
+                  className="relative overflow-hidden w-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-sm py-3 rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.35)] active:scale-[0.98] transition-all cursor-pointer"
+                >
                   {/* Subtle shine light sweep */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />
-                  <Download className="w-4 h-4" />
-                  <span>Baixar Checklist Gratuito</span>
-                </div>
+                  <span>Acessar agora</span>
+                  <ArrowRight className="w-4 h-4 text-black" />
+                </button>
               </div>
             </div>
-          </motion.button>
+          </motion.div>
 
           {/* Quem sou eu */}
           <motion.button
@@ -253,6 +256,12 @@ export default function Home({ setView }: HomeProps) {
           </motion.a>
         </div>
       </motion.div>
+
+      {/* Lead Capture Modal for Checklist */}
+      <LeadModal
+        isOpen={isLeadModalOpen}
+        onClose={() => setIsLeadModalOpen(false)}
+      />
     </div>
   );
 }

@@ -5,8 +5,8 @@
       "fields": [
         { "name": "name", "type": "string", "required": true },
         { "name": "email", "type": "string", "required": true },
-        { "name": "phone", "type": "string", "required": false },
-        { "name": "optIn", "type": "boolean", "required": true },
+        { "name": "optIn", "type": "boolean", "required": false },
+        { "name": "source", "type": "string", "required": false },
         { "name": "createdAt", "type": "timestamp", "required": true }
       ]
     }

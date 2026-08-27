@@ -3,6 +3,57 @@ import path from 'path';
 import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
 import { Resend } from 'resend';
+import { initializeApp, getApps } from 'firebase/app';
+import { initializeFirestore, collection, addDoc, serverTimestamp, getFirestore } from 'firebase/firestore';
+
+const CHECKLIST_DOWNLOAD_URL = 'https://drive.google.com/file/d/1vkyfMHsalPkigcefVudKL3bj2ghQtPRK/view?usp=sharing';
+
+// Lazy initialize Firestore client
+let firestoreDb: any = null;
+function getDatabaseInstance() {
+  if (firestoreDb) return firestoreDb;
+
+  try {
+    let firebaseConfig: any = {};
+    let databaseId = '(default)';
+
+    const configPath = path.join(process.cwd(), 'firebase-applet-config.json');
+    if (fs.existsSync(configPath)) {
+      const raw = fs.readFileSync(configPath, 'utf-8');
+      const parsed = JSON.parse(raw);
+      firebaseConfig = {
+        apiKey: parsed.apiKey,
+        authDomain: parsed.authDomain,
+        projectId: parsed.projectId,
+        storageBucket: parsed.storageBucket,
+        messagingSenderId: parsed.messagingSenderId,
+        appId: parsed.appId,
+      };
+      if (parsed.firestoreDatabaseId) {
+        databaseId = parsed.firestoreDatabaseId;
+      }
+    }
+
+    if (process.env.FIREBASE_API_KEY) {
+      firebaseConfig.apiKey = process.env.FIREBASE_API_KEY;
+    }
+    if (process.env.FIREBASE_PROJECT_ID) {
+      firebaseConfig.projectId = process.env.FIREBASE_PROJECT_ID;
+    }
+    if (process.env.FIREBASE_DATABASE_ID) {
+      databaseId = process.env.FIREBASE_DATABASE_ID;
+    }
+
+    if (firebaseConfig.apiKey && firebaseConfig.projectId) {
+      const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+      firestoreDb = initializeFirestore(app, {}, databaseId);
+    }
+  } catch (err) {
+    console.error('Erro ao inicializar Firestore no servidor:', err);
+  }
+
+  return firestoreDb;
+}
 
 async function startServer() {
   const app = express();
@@ -10,62 +61,99 @@ async function startServer() {
 
   app.use(express.json());
 
-  // API routes
-  app.get('/api/firebase-config', (req, res) => {
-    try {
-      const configPath = path.join(process.cwd(), 'firebase-applet-config.json');
-      if (fs.existsSync(configPath)) {
-        const rawData = fs.readFileSync(configPath, 'utf8');
-        res.json(JSON.parse(rawData));
-      } else {
-        res.json({});
-      }
-    } catch (error) {
-      console.error("Error reading firebase config", error);
-      res.json({});
-    }
+  // Healthcheck endpoint
+  app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
-  app.post('/api/leads/email', async (req, res) => {
+  // Lead capture endpoint: Saves to Firestore & Sends email via Resend
+  app.post('/api/leads', async (req, res) => {
     try {
-      const { name, email } = req.body;
-      
-      if (!name || !email) {
-        return res.status(400).json({ error: 'Name and email are required' });
+      const { name, email, optIn = true } = req.body || {};
+
+      const trimmedName = typeof name === 'string' ? name.trim() : '';
+      const trimmedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+
+      if (!trimmedName || !trimmedEmail) {
+        return res.status(400).json({ error: 'Nome e e-mail são obrigatórios.' });
       }
 
-      // Send Thank You Email using Resend
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(trimmedEmail)) {
+        return res.status(400).json({ error: 'Por favor, insira um e-mail válido.' });
+      }
+
+      console.log(`[Lead Recebido] Nome: ${trimmedName} | E-mail: ${trimmedEmail} | Opt-in: ${optIn}`);
+
+      // 1. Save Lead into Firestore Database
+      try {
+        const db = getDatabaseInstance();
+        if (db) {
+          await addDoc(collection(db, 'leads'), {
+            name: trimmedName,
+            email: trimmedEmail,
+            optIn: Boolean(optIn),
+            source: 'checklist_vendedor',
+            createdAt: serverTimestamp(),
+          });
+          console.log(`[Firestore] Lead de ${trimmedEmail} gravado com sucesso no banco de dados.`);
+        } else {
+          console.warn('[Firestore] Instância do banco de dados não disponível.');
+        }
+      } catch (dbError) {
+        console.error('[Firestore] Erro ao gravar lead no banco de dados:', dbError);
+      }
+
+      // 2. Send Thank You & Access Email via Resend
       if (process.env.RESEND_API_KEY) {
-        const resend = new Resend(process.env.RESEND_API_KEY);
         try {
+          const resend = new Resend(process.env.RESEND_API_KEY);
           await resend.emails.send({
             from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
-            to: email,
-            subject: 'Obrigado pelo seu cadastro!',
+            to: trimmedEmail,
+            subject: 'Seu Checklist do Vendedor no Estande está pronto!',
             html: `
-              <div style="font-family: sans-serif; padding: 20px;">
-                <h1>Olá, ${name}!</h1>
-                <p>Obrigado por se cadastrar. Seu checklist do vendedor no estande foi liberado.</p>
-                <p>Você pode acessar e baixar o arquivo clicando no link abaixo:</p>
-                <p><a href="https://drive.google.com/file/d/1vkyfMHsalPkigcefVudKL3bj2ghQtPRK/view?usp=sharing" style="display: inline-block; padding: 10px 20px; background-color: #f59e0b; color: #000; text-decoration: none; border-radius: 5px; font-weight: bold;">Acessar Checklist</a></p>
-                <br/>
-                <p>Atenciosamente,<br/>Nossa Equipe</p>
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background-color: #0e0e0e; color: #ffffff; border-radius: 12px; border: 1px solid #27272a;">
+                <div style="margin-bottom: 20px;">
+                  <span style="background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; font-size: 12px; font-weight: bold; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; border: 1px solid rgba(245, 158, 11, 0.3);">
+                    Acesso Imediato
+                  </span>
+                </div>
+                <h1 style="color: #f59e0b; margin-top: 8px; font-size: 24px;">Olá, ${trimmedName}!</h1>
+                <p style="color: #d4d4d8; font-size: 16px; line-height: 1.6; margin: 16px 0;">
+                  Obrigado pelo seu interesse! O seu <strong>Checklist do Vendedor no Estande</strong> já está liberado.
+                </p>
+                <p style="color: #a1a1aa; font-size: 14px; line-height: 1.5; margin-bottom: 24px;">
+                  Ele contém as 10 dicas práticas e essenciais para preparar seu time e não perder leads qualificados durante feiras e eventos empresariais.
+                </p>
+                <div style="margin: 32px 0; text-align: center;">
+                  <a href="${CHECKLIST_DOWNLOAD_URL}" target="_blank" style="display: inline-block; padding: 14px 32px; background-color: #f59e0b; color: #09090b; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);">
+                    Baixar Checklist do Vendedor
+                  </a>
+                </div>
+                <p style="color: #71717a; font-size: 13px; line-height: 1.5; border-top: 1px solid #27272a; padding-top: 20px; margin-top: 32px;">
+                  Se você quiser atrair mais visitantes e qualificar clientes no seu estande com Inteligência Artificial e automação, entre em contato comigo.<br/><br/>
+                  <strong>Guilherme R. Paranhos</strong><br/>
+                  <a href="https://instagram.com/paranhos.vx" style="color: #f59e0b; text-decoration: none;">@paranhos.vx</a>
+                </p>
               </div>
-            `
+            `,
           });
-          console.log(`Thank you email sent to ${email}`);
-        } catch (emailError) {
-          console.error("Failed to send email with Resend:", emailError);
-          // Don't fail the request if email fails, it was already saved
+          console.log(`[Resend] E-mail de confirmação e checklist enviado com sucesso para ${trimmedEmail}`);
+        } catch (resendError) {
+          console.error('[Resend] Erro ao enviar e-mail:', resendError);
         }
       } else {
-        console.warn("RESEND_API_KEY not set. Email was not sent.");
+        console.warn('[Resend] RESEND_API_KEY não configurada no ambiente. E-mail não disparado.');
       }
 
-      res.status(200).json({ success: true });
+      return res.status(200).json({
+        success: true,
+        downloadUrl: CHECKLIST_DOWNLOAD_URL,
+      });
     } catch (error) {
-      console.error('Error sending email:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.error('Erro no processamento do lead:', error);
+      return res.status(500).json({ error: 'Erro interno ao processar o formulário.' });
     }
   });
 
@@ -90,4 +178,6 @@ async function startServer() {
 }
 
 startServer();
+
+
 
