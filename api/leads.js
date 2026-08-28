@@ -88,8 +88,8 @@ export default async function handler(req, res) {
               <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #0c0c0e; color: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #27272a; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
                 <div style="width: 100%; background-color: #000000; text-align: center; border-bottom: 1px solid #27272a;">
                   <img 
-                    src="https://i.ibb.co/dwF2gW5k/1.jpg" 
-                    alt="${targetProduct} - Lista VIP" 
+                    src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&h=500&q=80" 
+                    alt="${targetProduct} - Estande em Feira Empresarial" 
                     width="600"
                     style="width: 100%; max-width: 600px; height: auto; max-height: 240px; object-fit: cover; display: block; border: 0; outline: none;"
                   />
@@ -126,8 +126,8 @@ export default async function handler(req, res) {
                 <!-- Header Banner Image -->
                 <div style="width: 100%; background-color: #000000; text-align: center; border-bottom: 1px solid #27272a;">
                   <img 
-                    src="https://i.ibb.co/dwF2gW5k/1.jpg" 
-                    alt="Checklist do Vendedor - Feiras & Eventos" 
+                    src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&h=500&q=80" 
+                    alt="Estande de Exibição - Feiras & Eventos Empresariais" 
                     width="600"
                     style="width: 100%; max-width: 600px; height: auto; max-height: 250px; object-fit: cover; display: block; border: 0; outline: none;"
                   />
