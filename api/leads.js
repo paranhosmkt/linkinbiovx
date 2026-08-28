@@ -126,10 +126,10 @@ export default async function handler(req, res) {
                 <!-- Header Banner Image -->
                 <div style="width: 100%; background-color: #000000; text-align: center; border-bottom: 1px solid #27272a;">
                   <img 
-                    src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&h=500&q=80" 
-                    alt="Estande de Exibição - Feiras & Eventos Empresariais" 
+                    src="https://i.postimg.cc/66V8h7Bd/Gemini-Generated-Image-h9e51dh9e51dh9e5.jpg" 
+                    alt="Checklist do Vendedor no Estande" 
                     width="600"
-                    style="width: 100%; max-width: 600px; height: auto; max-height: 250px; object-fit: cover; display: block; border: 0; outline: none;"
+                    style="width: 100%; max-width: 600px; height: auto; max-height: 300px; object-fit: cover; object-position: top center; display: block; border: 0; outline: none;"
                   />
                 </div>
 
