@@ -21,8 +21,8 @@ function getDb() {
       const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
       dbInstance = initializeFirestore(app, {}, databaseId);
     }
-  } catch (e) {
-    console.error('Vercel serverless Firebase init error:', e);
+  } catch {
+    // Silent
   }
   return dbInstance;
 }
@@ -37,6 +37,7 @@ export default async function handler(req, res) {
 
     const trimmedName = typeof name === 'string' ? name.trim() : '';
     const trimmedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+    const trimmedSector = typeof sector === 'string' ? sector.trim() : '';
 
     if (!trimmedName || !trimmedEmail) {
       return res.status(400).json({ error: 'Nome e e-mail são obrigatórios.' });
@@ -47,26 +48,52 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Por favor, insira um e-mail válido.' });
     }
 
-    // 1. Save to Firestore
+    const leadPayload = {
+      name: trimmedName,
+      email: trimmedEmail,
+      optIn: Boolean(optIn),
+      phone: phone ? String(phone).trim() : null,
+      sector: trimmedSector || null,
+      productName: productName || null,
+      source: source || 'checklist_vendedor',
+    };
+
+    // 1. Save to Google Sheets Webhook if defined
+    const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL || process.env.WEBHOOK_URL;
+    if (webhookUrl) {
+      try {
+        await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            data: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+            nome: trimmedName,
+            email: trimmedEmail,
+            mercado_de_atuacao: trimmedSector || 'Não informado',
+            origem: source || 'checklist_vendedor',
+            optIn: optIn ? 'Sim' : 'Não',
+            raw: leadPayload,
+          }),
+        });
+      } catch (errWeb) {
+        console.error('Webhook error:', errWeb);
+      }
+    }
+
+    // 2. Save to Firestore if available
     try {
       const db = getDb();
       if (db) {
         await addDoc(collection(db, 'leads'), {
-          name: trimmedName,
-          email: trimmedEmail,
-          optIn: Boolean(optIn),
-          phone: phone ? String(phone).trim() : null,
-          sector: sector ? String(sector).trim() : null,
-          productName: productName || null,
-          source: source || 'checklist_vendedor',
+          ...leadPayload,
           createdAt: serverTimestamp(),
         });
       }
     } catch (dbErr) {
-      console.error('Erro ao gravar no Firestore:', dbErr);
+      // Silent
     }
 
-    // 2. Send email with Resend
+    // 3. Send email with Resend
     if (process.env.RESEND_API_KEY) {
       try {
         const resend = new Resend(process.env.RESEND_API_KEY);
@@ -78,7 +105,7 @@ export default async function handler(req, res) {
         if (source && String(source).startsWith('waitlist_')) {
           const targetProduct = productName || (source === 'waitlist_vx-leads' ? 'VX Leads' : 'VX Sales');
           const betaDate = source === 'waitlist_vx-leads' ? '01 de agosto' : '10 de agosto';
-          const sectorInfo = sector ? `<p style="color: #a1a1aa; font-size: 13px; margin: 6px 0 0 0;">Setor cadastrado: <strong style="color: #ffffff;">${sector}</strong></p>` : '';
+          const sectorInfo = trimmedSector ? `<p style="color: #a1a1aa; font-size: 13px; margin: 6px 0 0 0;">Mercado / Segmento: <strong style="color: #ffffff;">${trimmedSector}</strong></p>` : '';
 
           await resend.emails.send({
             from: fromAddress,
@@ -117,6 +144,13 @@ export default async function handler(req, res) {
             `,
           });
         } else {
+          const sectorInfo = trimmedSector ? `
+            <div style="background-color: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 10px; padding: 12px 16px; margin: 0 0 20px 0;">
+              <p style="color: #f59e0b; font-weight: 700; font-size: 13px; margin: 0;">🏢 Mercado de Atuação Selecionado:</p>
+              <p style="color: #ffffff; font-size: 14px; font-weight: 600; margin: 4px 0 0 0;">${trimmedSector}</p>
+            </div>
+          ` : '';
+
           await resend.emails.send({
             from: fromAddress,
             to: trimmedEmail,
@@ -142,6 +176,8 @@ export default async function handler(req, res) {
                   <p style="color: #e4e4e7; font-size: 15px; line-height: 1.6; margin: 0 0 16px 0;">
                     Obrigado pelo seu interesse! O seu acesso ao aplicativo gratuito <strong>Checklist do Vendedor no Estande</strong> já está liberado.
                   </p>
+
+                  ${sectorInfo}
                   
                   <p style="color: #a1a1aa; font-size: 14px; line-height: 1.5; margin: 0 0 20px 0;">
                     Use a ferramenta interativa para preparar seu time e não perder leads qualificados durante feiras e eventos empresariais.

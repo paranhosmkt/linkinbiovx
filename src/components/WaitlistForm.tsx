@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, User, Briefcase, CheckCircle, Loader2, Sparkles, ArrowRight } from 'lucide-react';
+import { Mail, User, Briefcase, CheckCircle, Loader2, Sparkles, ArrowRight, ChevronDown } from 'lucide-react';
 
 interface WaitlistFormProps {
   productName: string;
@@ -7,6 +7,21 @@ interface WaitlistFormProps {
   betaDate: string;
   accentColor?: string; // 'blue' | 'emerald' | 'amber'
 }
+
+const MARKET_OPTIONS = [
+  'Tecnologia, Software & TI',
+  'Indústria, Máquinas & Automação',
+  'Construção Civil & Arquitetura',
+  'Saúde, Medicina & Farmacêutica',
+  'Agronegócio, Alimentos & Bebidas',
+  'Comércio, Varejo & Franquias',
+  'Logística, Transporte & Comex',
+  'Energia, Solar & Sustentabilidade',
+  'Educação, Treinamentos & Consultoria',
+  'Serviços B2B & Financeiro',
+  'Eventos, Marketing & Comunicação',
+  'Outro segmento',
+];
 
 export default function WaitlistForm({
   productName,
@@ -156,17 +171,27 @@ export default function WaitlistForm({
 
         <div>
           <label className="block text-zinc-300 text-xs font-semibold uppercase tracking-wider mb-1.5 pl-1">
-            Setor / Segmento da sua empresa (Opcional)
+            Mercado de Atuação / Segmento
           </label>
           <div className="relative">
             <Briefcase className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
-            <input
-              type="text"
+            <select
               value={sector}
               onChange={(e) => setSector(e.target.value)}
-              placeholder="Ex: Tecnologia, Indústria, Saúde, Serviços..."
-              className="w-full pl-10 pr-4 py-2.5 bg-zinc-900/90 border border-zinc-800 focus:border-white/40 rounded-xl text-white placeholder-zinc-500 text-sm focus:outline-none transition-all"
-            />
+              className="w-full pl-10 pr-10 py-2.5 bg-zinc-900/90 border border-zinc-800 focus:border-white/40 rounded-xl text-white text-sm focus:outline-none transition-all appearance-none cursor-pointer"
+            >
+              <option value="" className="bg-zinc-950 text-zinc-500">
+                Selecione o setor da sua empresa...
+              </option>
+              {MARKET_OPTIONS.map((opt) => (
+                <option key={opt} value={opt} className="bg-zinc-950 text-zinc-200">
+                  {opt}
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-zinc-500">
+              <ChevronDown className="w-4 h-4" />
+            </div>
           </div>
         </div>
 

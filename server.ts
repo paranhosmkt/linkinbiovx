@@ -4,11 +4,71 @@ import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
 import { Resend } from 'resend';
 import { initializeApp, getApps } from 'firebase/app';
-import { initializeFirestore, collection, addDoc, serverTimestamp, getFirestore } from 'firebase/firestore';
+import { initializeFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const CHECKLIST_APP_URL = 'https://checklistvendedor.vercel.app';
 
-// Lazy initialize Firestore client
+// Local storage directory for durable lead records without requiring Firebase
+const DATA_DIR = path.join(process.cwd(), 'data');
+const LEADS_FILE = path.join(DATA_DIR, 'leads.json');
+
+function ensureDataDirectory() {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+  if (!fs.existsSync(LEADS_FILE)) {
+    fs.writeFileSync(LEADS_FILE, JSON.stringify([], null, 2), 'utf-8');
+  }
+}
+
+function saveLeadLocally(lead: any) {
+  try {
+    ensureDataDirectory();
+    let leads: any[] = [];
+    if (fs.existsSync(LEADS_FILE)) {
+      const raw = fs.readFileSync(LEADS_FILE, 'utf-8');
+      leads = JSON.parse(raw || '[]');
+    }
+    const record = {
+      id: `lead_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      ...lead,
+      recordedAt: new Date().toISOString(),
+    };
+    leads.unshift(record);
+    fs.writeFileSync(LEADS_FILE, JSON.stringify(leads, null, 2), 'utf-8');
+    return record;
+  } catch (err) {
+    console.error('[Storage] Erro ao salvar lead no arquivo local:', err);
+    return null;
+  }
+}
+
+// Optional Google Sheets / Webhook forwarder
+async function forwardToGoogleSheets(lead: any) {
+  const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL || process.env.WEBHOOK_URL;
+  if (!webhookUrl) return;
+
+  try {
+    const res = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        data: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+        nome: lead.name,
+        email: lead.email,
+        mercado_de_atuacao: lead.sector || 'Não informado',
+        origem: lead.source || 'checklist_vendedor',
+        optIn: lead.optIn ? 'Sim' : 'Não',
+        raw: lead,
+      }),
+    });
+    console.log(`[Google Sheets Webhook] Status: ${res.status}`);
+  } catch (webhookErr) {
+    console.error('[Google Sheets Webhook] Erro ao disparar webhook:', webhookErr);
+  }
+}
+
+// Optional Firestore client (completely non-blocking)
 let firestoreDb: any = null;
 function getDatabaseInstance() {
   if (firestoreDb) return firestoreDb;
@@ -48,8 +108,8 @@ function getDatabaseInstance() {
       const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
       firestoreDb = initializeFirestore(app, {}, databaseId);
     }
-  } catch (err) {
-    console.error('Erro ao inicializar Firestore no servidor:', err);
+  } catch {
+    // Silent: Firebase is completely optional
   }
 
   return firestoreDb;
@@ -66,13 +126,50 @@ async function startServer() {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
-  // Lead capture endpoint: Saves to Firestore & Sends email via Resend
+  // Leads export endpoint (JSON or CSV format for easy import into Google Sheets / Excel)
+  app.get('/api/leads', (req, res) => {
+    try {
+      ensureDataDirectory();
+      let leads: any[] = [];
+      if (fs.existsSync(LEADS_FILE)) {
+        const raw = fs.readFileSync(LEADS_FILE, 'utf-8');
+        leads = JSON.parse(raw || '[]');
+      }
+
+      if (req.query.format === 'csv') {
+        const headers = 'ID,Data,Nome,Email,Mercado de Atuacao,Origem,OptIn\n';
+        const rows = leads.map((l) => {
+          const sanitize = (str: any) => `"${String(str || '').replace(/"/g, '""')}"`;
+          return [
+            sanitize(l.id),
+            sanitize(l.recordedAt || l.createdAt),
+            sanitize(l.name),
+            sanitize(l.email),
+            sanitize(l.sector),
+            sanitize(l.source),
+            sanitize(l.optIn ? 'Sim' : 'Não'),
+          ].join(',');
+        }).join('\n');
+
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+        res.setHeader('Content-Disposition', 'attachment; filename="leads_export.csv"');
+        return res.send(headers + rows);
+      }
+
+      return res.json({ total: leads.length, leads });
+    } catch (err) {
+      return res.status(500).json({ error: 'Erro ao listar leads.' });
+    }
+  });
+
+  // Lead capture endpoint
   app.post('/api/leads', async (req, res) => {
     try {
       const { name, email, optIn = true, phone, sector, source, productName } = req.body || {};
 
       const trimmedName = typeof name === 'string' ? name.trim() : '';
       const trimmedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+      const trimmedSector = typeof sector === 'string' ? sector.trim() : '';
 
       if (!trimmedName || !trimmedEmail) {
         return res.status(400).json({ error: 'Nome e e-mail são obrigatórios.' });
@@ -83,31 +180,39 @@ async function startServer() {
         return res.status(400).json({ error: 'Por favor, insira um e-mail válido.' });
       }
 
-      console.log(`[Lead Recebido] Nome: ${trimmedName} | E-mail: ${trimmedEmail} | Opt-in: ${optIn} | Source: ${source || 'checklist_vendedor'}`);
+      console.log(`[Lead Recebido] Nome: ${trimmedName} | E-mail: ${trimmedEmail} | Setor: ${trimmedSector} | Source: ${source || 'checklist_vendedor'}`);
 
-      // 1. Save Lead into Firestore Database
+      const leadPayload = {
+        name: trimmedName,
+        email: trimmedEmail,
+        sector: trimmedSector || null,
+        optIn: Boolean(optIn),
+        phone: phone ? String(phone).trim() : null,
+        productName: productName || null,
+        source: source || 'checklist_vendedor',
+      };
+
+      // 1. Always save locally as a guaranteed persistent store (Zero Firebase dependency)
+      saveLeadLocally(leadPayload);
+
+      // 2. Forward to Google Sheets Webhook if configured
+      forwardToGoogleSheets(leadPayload);
+
+      // 3. Optional: Save to Firestore if available
       try {
         const db = getDatabaseInstance();
         if (db) {
           await addDoc(collection(db, 'leads'), {
-            name: trimmedName,
-            email: trimmedEmail,
-            optIn: Boolean(optIn),
-            phone: phone ? String(phone).trim() : null,
-            sector: sector ? String(sector).trim() : null,
-            productName: productName || null,
-            source: source || 'checklist_vendedor',
+            ...leadPayload,
             createdAt: serverTimestamp(),
           });
-          console.log(`[Firestore] Lead de ${trimmedEmail} gravado com sucesso no banco de dados.`);
-        } else {
-          console.warn('[Firestore] Instância do banco de dados não disponível.');
+          console.log(`[Firestore] Lead de ${trimmedEmail} gravado com sucesso.`);
         }
-      } catch (dbError) {
-        console.error('[Firestore] Erro ao gravar lead no banco de dados:', dbError);
+      } catch {
+        // Silent
       }
 
-      // 2. Send Thank You & Access Email via Resend
+      // 4. Send Confirmation & Access Email via Resend
       if (process.env.RESEND_API_KEY) {
         try {
           const resend = new Resend(process.env.RESEND_API_KEY);
@@ -120,7 +225,7 @@ async function startServer() {
             // E-mail para lista de espera dos produtos Beta
             const targetProduct = productName || (source === 'waitlist_vx-leads' ? 'VX Leads' : 'VX Sales');
             const betaDate = source === 'waitlist_vx-leads' ? '01 de agosto' : '10 de agosto';
-            const sectorInfo = sector ? `<p style="color: #a1a1aa; font-size: 13px; margin: 6px 0 0 0;">Setor cadastrado: <strong style="color: #ffffff;">${sector}</strong></p>` : '';
+            const sectorInfo = trimmedSector ? `<p style="color: #a1a1aa; font-size: 13px; margin: 6px 0 0 0;">Mercado / Segmento: <strong style="color: #ffffff;">${trimmedSector}</strong></p>` : '';
 
             await resend.emails.send({
               from: fromAddress,
@@ -160,7 +265,14 @@ async function startServer() {
             });
             console.log(`[Resend] E-mail de waitlist enviado para ${trimmedEmail}`);
           } else {
-            // E-mail do Checklist do Vendedor
+            // E-mail do Checklist do Vendedor com o setor incluído
+            const sectorInfo = trimmedSector ? `
+              <div style="background-color: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 10px; padding: 12px 16px; margin: 0 0 20px 0;">
+                <p style="color: #f59e0b; font-weight: 700; font-size: 13px; margin: 0;">🏢 Mercado de Atuação Selecionado:</p>
+                <p style="color: #ffffff; font-size: 14px; font-weight: 600; margin: 4px 0 0 0;">${trimmedSector}</p>
+              </div>
+            ` : '';
+
             await resend.emails.send({
               from: fromAddress,
               to: trimmedEmail,
@@ -186,6 +298,8 @@ async function startServer() {
                     <p style="color: #e4e4e7; font-size: 15px; line-height: 1.6; margin: 0 0 16px 0;">
                       Obrigado pelo seu interesse! O seu acesso ao aplicativo gratuito <strong>Checklist do Vendedor no Estande</strong> já está liberado.
                     </p>
+
+                    ${sectorInfo}
                     
                     <p style="color: #a1a1aa; font-size: 14px; line-height: 1.5; margin: 0 0 20px 0;">
                       Use a ferramenta interativa para preparar seu time e não perder leads qualificados durante feiras e eventos empresariais.
@@ -216,8 +330,6 @@ async function startServer() {
         } catch (resendError) {
           console.error('[Resend] Erro ao enviar e-mail:', resendError);
         }
-      } else {
-        console.warn('[Resend] RESEND_API_KEY não configurada no ambiente. E-mail não disparado.');
       }
 
       return res.status(200).json({

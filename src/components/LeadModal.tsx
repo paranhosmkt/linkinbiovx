@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, CheckCircle, Mail, User, ArrowRight, ExternalLink, Loader2, Sparkles, ShieldCheck, Smartphone, WifiOff, Lock } from 'lucide-react';
+import { X, CheckCircle, Mail, User, ArrowRight, ExternalLink, Loader2, Sparkles, ShieldCheck, WifiOff, Briefcase, ChevronDown } from 'lucide-react';
 
 interface LeadModalProps {
   isOpen: boolean;
@@ -9,9 +9,26 @@ interface LeadModalProps {
 
 const CHECKLIST_APP_URL = 'https://checklistvendedor.vercel.app';
 
+const MARKET_OPTIONS = [
+  'Tecnologia, Software & TI',
+  'Indústria, Máquinas & Automação',
+  'Construção Civil & Arquitetura',
+  'Saúde, Medicina & Farmacêutica',
+  'Agronegócio, Alimentos & Bebidas',
+  'Comércio, Varejo & Franquias',
+  'Logística, Transporte & Comex',
+  'Energia, Solar & Sustentabilidade',
+  'Educação, Treinamentos & Consultoria',
+  'Serviços B2B & Financeiro',
+  'Eventos, Marketing & Comunicação',
+  'Outro segmento',
+];
+
 export default function LeadModal({ isOpen, onClose }: LeadModalProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [sector, setSector] = useState('');
+  const [customSector, setCustomSector] = useState('');
   const [optIn, setOptIn] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,6 +41,7 @@ export default function LeadModal({ isOpen, onClose }: LeadModalProps) {
 
     const trimmedName = name.trim();
     const trimmedEmail = email.trim().toLowerCase();
+    const finalSector = sector === 'Outro segmento' && customSector.trim() ? customSector.trim() : sector;
 
     if (!trimmedName) {
       setError('Por favor, informe seu nome.');
@@ -32,6 +50,11 @@ export default function LeadModal({ isOpen, onClose }: LeadModalProps) {
 
     if (!trimmedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
       setError('Por favor, informe um e-mail válido.');
+      return;
+    }
+
+    if (!sector) {
+      setError('Por favor, selecione seu mercado de atuação.');
       return;
     }
 
@@ -46,7 +69,9 @@ export default function LeadModal({ isOpen, onClose }: LeadModalProps) {
         body: JSON.stringify({
           name: trimmedName,
           email: trimmedEmail,
+          sector: finalSector,
           optIn,
+          source: 'checklist_vendedor',
         }),
       });
 
@@ -72,6 +97,8 @@ export default function LeadModal({ isOpen, onClose }: LeadModalProps) {
   const handleReset = () => {
     setName('');
     setEmail('');
+    setSector('');
+    setCustomSector('');
     setError(null);
     setSubmitted(false);
     onClose();
@@ -162,7 +189,7 @@ export default function LeadModal({ isOpen, onClose }: LeadModalProps) {
                   {/* Email Input */}
                   <div>
                     <label className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-1.5">
-                      Seu melhor e-mail
+                      Seu melhor e-mail *
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500">
@@ -177,6 +204,52 @@ export default function LeadModal({ isOpen, onClose }: LeadModalProps) {
                         className="w-full pl-10 pr-4 py-3 bg-zinc-900/90 border border-zinc-800 rounded-xl text-white placeholder-zinc-500 text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all"
                       />
                     </div>
+                  </div>
+
+                  {/* Market / Sector Dropdown */}
+                  <div>
+                    <label className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-1.5">
+                      Mercado de atuação da sua empresa *
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500">
+                        <Briefcase className="w-4 h-4" />
+                      </div>
+                      <select
+                        required
+                        value={sector}
+                        onChange={(e) => setSector(e.target.value)}
+                        className="w-full pl-10 pr-10 py-3 bg-zinc-900/90 border border-zinc-800 rounded-xl text-white text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all appearance-none cursor-pointer"
+                      >
+                        <option value="" disabled className="bg-zinc-950 text-zinc-500">
+                          Selecione o segmento / mercado...
+                        </option>
+                        {MARKET_OPTIONS.map((opt) => (
+                          <option key={opt} value={opt} className="bg-zinc-950 text-zinc-200">
+                            {opt}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-zinc-500">
+                        <ChevronDown className="w-4 h-4" />
+                      </div>
+                    </div>
+
+                    {sector === 'Outro segmento' && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        className="mt-2"
+                      >
+                        <input
+                          type="text"
+                          value={customSector}
+                          onChange={(e) => setCustomSector(e.target.value)}
+                          placeholder="Especifique qual o seu segmento..."
+                          className="w-full px-3.5 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl text-white placeholder-zinc-500 text-xs focus:outline-none focus:border-amber-500 transition-all"
+                        />
+                      </motion.div>
+                    )}
                   </div>
 
                   {/* Opt-in Checkbox */}

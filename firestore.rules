@@ -7,12 +7,15 @@ service cloud.firestore {
 
     function isValidLead(data) {
       return data.keys().hasAll(['name', 'email', 'createdAt']) &&
-             data.keys().hasOnly(['name', 'email', 'optIn', 'source', 'createdAt']) &&
-             data.name is string && data.name.size() > 0 && data.name.size() <= 120 &&
+             data.keys().hasOnly(['name', 'email', 'sector', 'optIn', 'phone', 'productName', 'source', 'createdAt']) &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 150 &&
              data.email is string && data.email.size() > 5 && data.email.size() <= 150 &&
              data.email.matches('^.+@.+\\..+$') &&
+             (!('sector' in data) || data.sector == null || (data.sector is string && data.sector.size() <= 150)) &&
+             (!('phone' in data) || data.phone == null || (data.phone is string && data.phone.size() <= 50)) &&
+             (!('productName' in data) || data.productName == null || (data.productName is string && data.productName.size() <= 100)) &&
              (!('optIn' in data) || data.optIn is bool) &&
-             (!('source' in data) || (data.source is string && data.source.size() <= 100)) &&
+             (!('source' in data) || data.source == null || (data.source is string && data.source.size() <= 100)) &&
              data.createdAt is timestamp;
     }
 
