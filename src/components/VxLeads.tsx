@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { ArrowLeft, Clock } from 'lucide-react';
 import { ViewState } from '../types';
+import { VxLeadsIcon } from './VxIcons';
 
 interface VxLeadsProps {
   setView: (view: ViewState) => void;
@@ -25,14 +26,7 @@ export default function VxLeads({ setView }: VxLeadsProps) {
       <div className="flex-1 flex flex-col">
         <div className="p-6 md:p-8 bg-zinc-900/50 backdrop-blur-xl rounded-3xl border border-white/[0.08] mb-8 shadow-2xl">
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
-            <div className="shrink-0 overflow-hidden rounded-2xl border border-white/10 w-16 h-16 sm:w-20 sm:h-20 shadow-md">
-              <img
-                src="https://i.ibb.co/Z1H2NT7y/2.jpg"
-                alt="VX Leads"
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover"
-              />
-            </div>
+            <VxLeadsIcon size="lg" />
             <div>
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-1.5">
                 Em desenvolvimento

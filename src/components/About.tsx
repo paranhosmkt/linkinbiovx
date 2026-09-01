@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { ViewState } from '../types';
 import WaitlistForm from './WaitlistForm';
+import { VxAvatarIcon, VxLeadsIcon, VxSalesIcon } from './VxIcons';
 
 interface AboutProps {
   setView: (view: ViewState) => void;
@@ -285,15 +286,9 @@ export default function About({ setView }: AboutProps) {
                     className="w-full p-4 sm:p-5 flex items-center justify-between gap-3 text-left focus:outline-none transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
-                      <div className="relative shrink-0 overflow-hidden rounded-xl border border-zinc-800 w-11 h-11 flex items-center justify-center bg-zinc-950">
-                        <img
-                          src={sol.image}
-                          alt={sol.name}
-                          referrerPolicy="no-referrer"
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/10" />
-                      </div>
+                      {sol.id === 'avatar' && <VxAvatarIcon size="md" />}
+                      {sol.id === 'leads' && <VxLeadsIcon size="md" />}
+                      {sol.id === 'sales' && <VxSalesIcon size="md" />}
 
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">

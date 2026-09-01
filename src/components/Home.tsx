@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { User, Instagram, ChevronRight, ExternalLink, FileText, ArrowRight, WifiOff, Smartphone } from 'lucide-react';
 import { ViewState } from '../types';
 import LeadModal from './LeadModal';
+import { VxAvatarIcon, VxLeadsIcon, VxSalesIcon } from './VxIcons';
 
 interface HomeProps {
   setView: (view: ViewState) => void;
@@ -165,14 +166,7 @@ export default function Home({ setView }: HomeProps) {
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />
             <div className="flex items-center gap-3.5 min-w-0">
-              <div className="p-2 bg-zinc-800/80 group-hover:bg-zinc-700/80 border border-zinc-700/50 rounded-xl transition-colors overflow-hidden flex items-center justify-center shrink-0 w-9 h-9">
-                <img
-                  src="https://i.ibb.co/dwF2gW5k/1.jpg"
-                  alt="VX Avatar"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover rounded-md"
-                />
-              </div>
+              <VxAvatarIcon size="sm" />
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-white text-sm sm:text-base">VX Avatar</span>
@@ -193,14 +187,7 @@ export default function Home({ setView }: HomeProps) {
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />
             <div className="flex items-center gap-3.5 min-w-0">
-              <div className="p-2 bg-zinc-800/80 group-hover:bg-zinc-700/80 border border-zinc-700/50 rounded-xl transition-colors overflow-hidden flex items-center justify-center shrink-0 w-9 h-9">
-                <img
-                  src="https://i.ibb.co/Z1H2NT7y/2.jpg"
-                  alt="VX Leads"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover rounded-md"
-                />
-              </div>
+              <VxLeadsIcon size="sm" />
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-white text-sm sm:text-base">VX Leads</span>
@@ -224,14 +211,7 @@ export default function Home({ setView }: HomeProps) {
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />
             <div className="flex items-center gap-3.5 min-w-0">
-              <div className="p-2 bg-zinc-800/80 group-hover:bg-zinc-700/80 border border-zinc-700/50 rounded-xl transition-colors overflow-hidden flex items-center justify-center shrink-0 w-9 h-9">
-                <img
-                  src="https://i.ibb.co/RkkMZg7R/3.jpg"
-                  alt="VX Sales"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover rounded-md"
-                />
-              </div>
+              <VxSalesIcon size="sm" />
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-white text-sm sm:text-base">VX Sales</span>
