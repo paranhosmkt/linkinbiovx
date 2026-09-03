@@ -178,12 +178,14 @@ export default function Home({ setView }: HomeProps) {
           </motion.a>
 
           {/* VX Leads */}
-          <motion.button
-            onClick={() => setView('vx-leads')}
+          <motion.a
+            href="https://www.vxleads.com.br"
+            target="_blank"
+            rel="noopener noreferrer"
             variants={itemVariants}
             whileHover={{ scale: 1.015, y: -2 }}
             whileTap={{ scale: 0.98 }}
-            className="relative flex items-center justify-between w-full p-4 bg-zinc-900/60 hover:bg-zinc-800/70 backdrop-blur-xl border border-white/[0.08] hover:border-white/20 rounded-2xl transition-all duration-300 group shadow-sm overflow-hidden text-left cursor-pointer"
+            className="relative flex items-center justify-between w-full p-4 bg-zinc-900/60 hover:bg-zinc-800/70 backdrop-blur-xl border border-white/[0.08] hover:border-white/20 rounded-2xl transition-all duration-300 group shadow-sm overflow-hidden cursor-pointer"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />
             <div className="flex items-center gap-3.5 min-w-0">
@@ -191,15 +193,12 @@ export default function Home({ setView }: HomeProps) {
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-white text-sm sm:text-base">VX Leads</span>
-                  <span className="text-[10px] font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20 px-1.5 py-0.5 rounded">
-                    Em breve
-                  </span>
                 </div>
                 <span className="text-xs text-zinc-400 block truncate">Gamificação e totens para captura de dados</span>
               </div>
             </div>
-            <ChevronRight className="w-4 h-4 text-zinc-500 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0 ml-2" />
-          </motion.button>
+            <ExternalLink className="w-4 h-4 text-zinc-500 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 ml-2" />
+          </motion.a>
 
           {/* VX Sales */}
           <motion.button

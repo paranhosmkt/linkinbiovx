@@ -16,6 +16,7 @@ import {
   Zap,
   CheckCircle2,
   Clock,
+  ExternalLink,
 } from 'lucide-react';
 import { ViewState } from '../types';
 import WaitlistForm from './WaitlistForm';
@@ -378,9 +379,32 @@ export default function About({ setView }: AboutProps) {
                             })}
                           </div>
 
-                          {/* Formulário de Lista de Espera embutido */}
-                          {sol.id === 'leads' && (
+                          {/* Link do site oficial */}
+                          {sol.id === 'avatar' && (
                             <div className="pt-2">
+                              <a
+                                href="https://www.vxvirtual.com.br"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl font-semibold text-sm bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-black shadow-lg shadow-amber-500/20 transition-all cursor-pointer"
+                              >
+                                <span>Acessar www.vxvirtual.com.br</span>
+                                <ExternalLink className="w-4 h-4" />
+                              </a>
+                            </div>
+                          )}
+
+                          {sol.id === 'leads' && (
+                            <div className="pt-2 space-y-3">
+                              <a
+                                href="https://www.vxleads.com.br"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl font-semibold text-sm bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-lg shadow-blue-500/20 transition-all cursor-pointer"
+                              >
+                                <span>Acessar www.vxleads.com.br</span>
+                                <ExternalLink className="w-4 h-4" />
+                              </a>
                               <WaitlistForm
                                 productName="VX Leads"
                                 productKey="vx-leads"

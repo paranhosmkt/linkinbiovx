@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { ArrowLeft, Clock } from 'lucide-react';
+import { ArrowLeft, Clock, ExternalLink } from 'lucide-react';
 import { ViewState } from '../types';
 import { VxLeadsIcon } from './VxIcons';
 
@@ -29,7 +29,7 @@ export default function VxLeads({ setView }: VxLeadsProps) {
             <VxLeadsIcon size="lg" />
             <div>
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-1.5">
-                Em desenvolvimento
+                Plataforma Oficial
               </div>
               <h2 className="text-3xl font-bold tracking-tight text-white">
                 O VX Leads
@@ -51,12 +51,17 @@ export default function VxLeads({ setView }: VxLeadsProps) {
             </div>
           </div>
           
-          <div className="flex flex-col items-center justify-center p-8 bg-zinc-950/60 rounded-2xl border border-dashed border-white/15 text-center">
-            <div className="p-3.5 bg-zinc-900/80 border border-white/10 rounded-2xl mb-4 shadow-inner">
-              <Clock className="w-6 h-6 text-blue-400" />
-            </div>
-            <h3 className="text-white font-bold text-lg mb-1">Produto em desenvolvimento</h3>
-            <p className="text-xs sm:text-sm text-zinc-400">Previsão para entrar em operação: <span className="text-white font-semibold">15 de setembro</span></p>
+          <div className="flex flex-col items-center justify-center p-8 bg-zinc-950/60 rounded-2xl border border-blue-500/20 text-center space-y-4">
+            <a
+              href="https://www.vxleads.com.br"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold text-base rounded-xl shadow-lg shadow-blue-500/20 transition-all hover:scale-105 active:scale-95 cursor-pointer"
+            >
+              <span>Acessar www.vxleads.com.br</span>
+              <ExternalLink className="w-4 h-4" />
+            </a>
+            <p className="text-xs text-zinc-400">Clique para abrir o site oficial do VX Leads em uma nova aba</p>
           </div>
         </div>
       </div>
