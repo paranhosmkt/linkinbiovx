@@ -194,7 +194,7 @@ export default function Home({ setView }: HomeProps) {
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-white text-sm sm:text-base">VX Leads</span>
                 </div>
-                <span className="text-xs text-zinc-400 block truncate">Gamificação e totens para captura de dados</span>
+                <span className="text-xs text-zinc-400 block truncate">Gamificação para captura de leads no estande.</span>
               </div>
             </div>
             <ExternalLink className="w-4 h-4 text-zinc-500 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 ml-2" />
