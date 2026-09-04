@@ -4,6 +4,7 @@ import Home from './components/Home';
 import About from './components/About';
 import VxSales from './components/VxSales';
 import VxLeads from './components/VxLeads';
+import VxVirtual from './components/VxVirtual';
 import BackgroundEffects from './components/BackgroundEffects';
 import { ViewState } from './types';
 
@@ -30,6 +31,7 @@ export default function App() {
           {view === 'about' && <About key="about" setView={setView} />}
           {view === 'vx-leads' && <VxLeads key="vx-leads" setView={setView} />}
           {view === 'vx-sales' && <VxSales key="vx-sales" setView={setView} />}
+          {view === 'vx-virtual' && <VxVirtual key="vx-virtual" setView={setView} />}
         </AnimatePresence>
       </div>
     </div>

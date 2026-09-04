@@ -3,9 +3,9 @@ import { Mail, User, Briefcase, CheckCircle, Loader2, Sparkles, ArrowRight, Chev
 
 interface WaitlistFormProps {
   productName: string;
-  productKey: 'vx-leads' | 'vx-sales';
+  productKey: 'vx-leads' | 'vx-sales' | 'vx-virtual';
   betaDate: string;
-  accentColor?: string; // 'blue' | 'emerald' | 'amber'
+  accentColor?: string; // 'blue' | 'emerald' | 'amber' | 'purple'
 }
 
 const MARKET_OPTIONS = [
@@ -83,12 +83,16 @@ export default function WaitlistForm({
     if (accentColor === 'emerald') {
       return 'from-emerald-500 via-green-400 to-emerald-500 text-black shadow-[0_0_25px_rgba(16,185,129,0.35)]';
     }
+    if (accentColor === 'purple') {
+      return 'from-purple-500 via-pink-400 to-purple-500 text-black shadow-[0_0_25px_rgba(168,85,247,0.35)]';
+    }
     return 'from-amber-500 via-amber-400 to-amber-500 text-black shadow-[0_0_25px_rgba(245,158,11,0.35)]';
   };
 
   const getBadgeColor = () => {
     if (accentColor === 'blue') return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
     if (accentColor === 'emerald') return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+    if (accentColor === 'purple') return 'bg-purple-500/10 text-purple-400 border-purple-500/20';
     return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
   };
 

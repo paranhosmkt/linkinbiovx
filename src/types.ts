@@ -1,1 +1,1 @@
-export type ViewState = 'home' | 'about' | 'vx-sales' | 'vx-leads';
+export type ViewState = 'home' | 'about' | 'vx-sales' | 'vx-leads' | 'vx-virtual';

@@ -17,10 +17,14 @@ import {
   CheckCircle2,
   Clock,
   ExternalLink,
+  Glasses,
+  Layers,
+  GraduationCap,
+  Trophy,
 } from 'lucide-react';
 import { ViewState } from '../types';
 import WaitlistForm from './WaitlistForm';
-import { VxAvatarIcon, VxLeadsIcon, VxSalesIcon } from './VxIcons';
+import { VxAvatarIcon, VxLeadsIcon, VxSalesIcon, VxVirtualIcon } from './VxIcons';
 
 interface AboutProps {
   setView: (view: ViewState) => void;
@@ -147,6 +151,44 @@ const solutions: Solution[] = [
         desc: 'Filtra o real momento de compra e entrega a oportunidade pronta para o closer assinar o contrato.',
         icon: Flame,
         badge: 'Alta Conversão',
+      },
+    ],
+  },
+  {
+    id: 'virtual',
+    name: 'O VX Virtual',
+    badge: 'Realidade Virtual',
+    color: 'from-purple-500 to-indigo-500',
+    accentBg: 'bg-purple-500/10 text-purple-300 border-purple-500/20',
+    borderColor: 'border-purple-500/30',
+    image: 'https://i.ibb.co/dwF2gW5k/1.jpg',
+    mainIcon: Glasses,
+    tagline: 'Realidade virtual para criar experiências únicas e personalizadas para treinamentos e apresentação de produtos.',
+    description: 'Ambientes imersivos em realidade virtual com trilhas de aprendizado estruturadas e gamificação para revolucionar a capacitação de equipes e apresentação de produtos em escala real.',
+    highlights: [
+      {
+        title: 'Treinamentos Imersivos & Simulações',
+        desc: 'Simule procedimentos operacionais, manutenções e protocolos de segurança em ambientes virtuais ultrarrealistas sem riscos operacionais.',
+        icon: GraduationCap,
+        badge: 'Capacitação 3D',
+      },
+      {
+        title: 'Apresentação de Produtos em Escala Real',
+        desc: 'Exiba maquinários pesados, protótipos complexos e lançamentos em estandes e reuniões sem necessidade de transporte físico.',
+        icon: Layers,
+        badge: 'Showroom Virtual',
+      },
+      {
+        title: 'Trilhas de Aprendizado & Gamificação',
+        desc: 'Jornadas pedagógicas estruturadas passo a passo com pontuação, desafios práticos e feedbacks imediatos que multiplicam a retenção.',
+        icon: Trophy,
+        badge: 'Gamificado',
+      },
+      {
+        title: 'Métricas & Análise de Desempenho',
+        desc: 'Mapeamento preciso de decisões, tempo de execução e relatórios detalhados para mensurar a evolução e o ROI das equipes.',
+        icon: BarChart3,
+        badge: 'Analytics',
       },
     ],
   },
@@ -290,6 +332,7 @@ export default function About({ setView }: AboutProps) {
                       {sol.id === 'avatar' && <VxAvatarIcon size="md" />}
                       {sol.id === 'leads' && <VxLeadsIcon size="md" />}
                       {sol.id === 'sales' && <VxSalesIcon size="md" />}
+                      {sol.id === 'virtual' && <VxVirtualIcon size="md" />}
 
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
@@ -419,9 +462,20 @@ export default function About({ setView }: AboutProps) {
                               <WaitlistForm
                                 productName="VX Sales"
                                 productKey="vx-sales"
-                                betaDate="10 de agosto"
+                                betaDate="15 de outubro"
                                 accentColor="emerald"
                               />
+                            </div>
+                          )}
+
+                          {sol.id === 'virtual' && (
+                            <div className="pt-2">
+                              <button
+                                onClick={() => setView('vx-virtual')}
+                                className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl font-semibold text-sm bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-lg shadow-purple-500/20 transition-all cursor-pointer"
+                              >
+                                <span>Ver detalhes do VX Virtual</span>
+                              </button>
                             </div>
                           )}
                         </div>

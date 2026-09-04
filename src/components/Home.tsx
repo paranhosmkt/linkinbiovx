@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { User, Instagram, ChevronRight, ExternalLink, FileText, ArrowRight, WifiOff, Smartphone } from 'lucide-react';
 import { ViewState } from '../types';
 import LeadModal from './LeadModal';
-import { VxAvatarIcon, VxLeadsIcon, VxSalesIcon } from './VxIcons';
+import { VxAvatarIcon, VxLeadsIcon, VxSalesIcon, VxVirtualIcon } from './VxIcons';
 
 interface HomeProps {
   setView: (view: ViewState) => void;
@@ -219,6 +219,30 @@ export default function Home({ setView }: HomeProps) {
                   </span>
                 </div>
                 <span className="text-xs text-zinc-400 block truncate">Triagem e abordagem pós-evento via WhatsApp</span>
+              </div>
+            </div>
+            <ChevronRight className="w-4 h-4 text-zinc-500 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+          </motion.button>
+
+          {/* VX Virtual */}
+          <motion.button
+            onClick={() => setView('vx-virtual')}
+            variants={itemVariants}
+            whileHover={{ scale: 1.015, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            className="relative flex items-center justify-between w-full p-4 bg-zinc-900/60 hover:bg-zinc-800/70 backdrop-blur-xl border border-white/[0.08] hover:border-white/20 rounded-2xl transition-all duration-300 group shadow-sm overflow-hidden text-left cursor-pointer"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />
+            <div className="flex items-center gap-3.5 min-w-0">
+              <VxVirtualIcon size="sm" />
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-white text-sm sm:text-base">VX Virtual</span>
+                  <span className="text-[10px] font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20 px-1.5 py-0.5 rounded">
+                    VR
+                  </span>
+                </div>
+                <span className="text-xs text-zinc-400 block truncate">Realidade virtual para treinamentos e produtos</span>
               </div>
             </div>
             <ChevronRight className="w-4 h-4 text-zinc-500 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0 ml-2" />
